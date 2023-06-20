@@ -1,0 +1,63 @@
+app_name: @project.artifactId@
+app_version: @project.version@
+
+server:
+  port: 9014
+
+service:
+  ms-claim-bundler:
+    messaging:
+      topic: ${CLAIM_BUNDLER_TOPIC}
+      new-claim:
+        queue: ${CLAIM_BUNDLER_CLAIM_SUBMIT_QUEUE}
+        routingKey: ${CLAIM_BUNDLER_CLAIM_SUBMIT_ROUTING_KEY}
+      update-contact:
+        queue: ${CLAIM_BUNDLER_UPDATE_CONTACT_QUEUE}
+        routingKey: ${CLAIM_BUNDLER_UPDATE_CONTACT_ROUTING_KEY}
+  send-notification:
+    claimant-email-override: ${CLAIMANT_EMAIL_OVERRIDE:}
+    messaging:
+      topic: ${EMAIL_NOTIFICATION_TOPIC}
+      new-claim:
+        queue: ${EMAIL_NOTIFICATION_QUEUE}
+        queue_url: ${EMAIL_NOTIFICATION_QUEUE_URL}
+    send_workplace_contact_invite_template_id: ${SEND_WORKPLACE_CONTACT_INVITE_TEMPLATE_ID}
+    send_workplace_contact_approval_template_id: ${SEND_WORKPLACE_CONTACT_APPROVAL_TEMPLATE_ID}
+    send_workplace_contact_rejection_template_id: ${SEND_WORKPLACE_CONTACT_REJECTION_TEMPLATE_ID}
+    send_claim_submission_template_id: ${SEND_CLAIM_SUBMISSION_TEMPLATE_ID}
+    send_claim_countersign_submission_template_id: ${SEND_CLAIM_COUNTERSIGN_SUBMISSION_TEMPLATE_ID}
+    send_personal_information_update_template_id: ${SEND_PERSONAL_INFORMATION_UPDATE_TEMPLATE_ID}
+    client_api_key: ${CLIENT_API_KEY}
+
+uk:
+  gov:
+    dwp:
+      health:
+        integration:
+          outbound-topic-exchange: ${CLAIM_BUNDLER_TOPIC}
+          aws-region: ${AWS_REGION}
+          sqs-endpoint-override: ${AWS_SQS_OVERRIDE_URL:}
+          sns-endpoint-override: ${AWS_SNS_OVERRIDE_URL:}
+        event:
+          cryptoConfig:
+            cacheKmsDataKeys: ${MESSAGING_ENCRYPTION}
+            dataKeyId: ${AWS_ENCRYPTION_DATA_KEY}
+            kmsEndpointOverride: ${AWS_ENCRYPTION_KMS_OVERRIDE:}
+            region: ${AWS_REGION}
+
+
+spring:
+  data:
+    mongodb:
+      database: ${MONGODB_DBNAME}
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
+
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+
+feature:
+  encryption:
+    messaging:
+      enabled: ${MESSAGING_ENCRYPTION}

@@ -1,0 +1,51 @@
+service:
+  ms-claim-bundler:
+    messaging:
+      topic: atw-send-to-drs
+      new-claim:
+        queue: atw-send-claim
+        routingKey: new.claim
+      update-contact:
+        queue: atw-update-contact
+        routingKey: update.contact
+  send-notification:
+    claimant-email-override: '' # override the claimant email address
+    messaging:
+      topic: atw-send-email-notifications
+      new-claim:
+        queue: atw-email-notifications
+        queue_url: http://localhost:4566/000000000000/atw-email-notifications
+    send_workplace_contact_invite_template_id: 1
+    send_workplace_contact_approval_template_id: 2
+    send_workplace_contact_rejection_template_id: 3
+    send_claim_submission_template_id: 4
+    send_claim_countersign_submission_template_id: 5
+    send_personal_information_update_template_id: 6
+    client_api_key: abcssasdwe
+
+uk:
+  gov:
+    dwp:
+      health:
+        integration:
+          outbound-topic-exchange: send-to-agent-topic
+          aws-region: us-east-1
+          sqs-endpoint-override: http://localhost:4566
+          sns-endpoint-override: http://localhost:4566
+        event:
+          cryptoConfig:
+            cacheKmsDataKeys: true
+            dataKeyId: alias/test_claims_sns_id
+            kmsEndpointOverride: http://localhost:4566
+            region: us-east-1
+
+spring:
+  data:
+    mongodb:
+      database: atw-ms-claim
+      uri: mongodb://localhost:27017
+
+feature:
+  encryption:
+    messaging:
+      enabled: false

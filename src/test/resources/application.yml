@@ -1,0 +1,26 @@
+app_name: msclaim.application
+app_version: msclaim.version
+
+server:
+  port: 9014
+
+service:
+  send-notification:
+    claimant-email-override: '' # override the claimant email address
+    send_workplace_contact_invite_template_id: 1
+    send_workplace_contact_approval_template_id: 2
+    send_workplace_contact_rejection_template_id: 3
+    send_claim_submission_template_id: 4
+    send_claim_countersign_submission_template_id: 5
+    send_personal_information_update_template_id: 6
+
+spring:
+  data:
+    mongodb:
+      database: ${MONGODB_DBNAME}
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
+
+  jackson:
+     deserialization:
+      fail-on-unknown-properties: true

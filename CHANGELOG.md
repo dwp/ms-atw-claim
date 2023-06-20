@@ -1,0 +1,57 @@
+# Changelog
+
+## 1.10.0 - (2023-06-20)
+* Update all fragments to latest version
+* Update dependency versions
+* Update distroless version
+* Update cron schedule to run weekdays only 
+
+## 1.9.0 - (2023-05-26)
+* adding open source functionality for a github repository
+* Update all fragments to latest version
+* Update dependency versions
+
+## 1.8.0 - (2023-04-19)
+* Fix to temporarily support the old and new data model for support worker received support which can be documented in hours or hours and minutes
+* Update all fragments to latest
+
+## 1.7.0 - (2023-04-11)
+* Add minutes for support worker so support received can be documented in hours and minutes
+* Update all fragments to latest
+* Update dependency versions
+
+## 1.6.0 - (2023-03-06)
+* Update to model to use homeNumber and mobileNumber instead of phoneNumber
+* Move to saas runners
+* Update all fragments to latest
+* Update dependency versions
+
+## 1.5.0 - (2022-12-6)
+
+* Update all fragments to latest
+* Removed old dependency suppression
+* Added new dependency suppression
+
+## 1.4.0 - (2022-11-8)
+
+* Updated Spring Boot version (2.7.5)
+* Snakeyaml version update (1.33)
+* Distroless version bump
+
+## 1.3.0 - (2022-10-11)
+
+* Upgrade Spring Boot (2.7.3)
+* Address Snakeyaml vulnerability in 1.30
+* Update all fragments to latest
+
+## 1.2.0 - (2022-08-19)
+
+* Updates fragment version for trivy container
+
+## 1.1.0 - (2022-08-01)
+
+* Release
+
+## 1.0.0 - (2022-07-18)
+
+* Initial release
