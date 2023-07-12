@@ -52,10 +52,12 @@ spring:
       database: ${MONGODB_DBNAME}
       uri: ${MONGODB_URI}
       auto-index-creation: true
-
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+  logging:
+    level:
+      ROOT: INFO
 
 feature:
   encryption:

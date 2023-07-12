@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.11.0 - (2023-07-11)
+* Updated spring logging for production
+* Update fragment
+* Project name match skip added
+
 ## 1.10.0 - (2023-06-20)
 * Update all fragments to latest version
 * Update dependency versions

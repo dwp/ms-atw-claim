@@ -1,6 +1,5 @@
 package uk.gov.dwp.health.atw.msclaim.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.dao.DuplicateKeyException;
@@ -28,8 +27,6 @@ import uk.gov.dwp.health.atw.msclaim.models.responses.CountResponse;
 import uk.gov.dwp.health.atw.msclaim.repositories.DatabaseSequenceRepository;
 import uk.gov.dwp.health.atw.msclaim.services.ClaimService;
 import uk.gov.dwp.health.atw.msclaim.services.ClaimSubmissionService;
-import uk.gov.dwp.health.crypto.exception.CryptoException;
-
 
 @RestController
 @Validated

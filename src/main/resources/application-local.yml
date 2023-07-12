@@ -45,6 +45,10 @@ spring:
       database: atw-ms-claim
       uri: mongodb://localhost:27017
 
+  logging:
+    level:
+      ROOT: INFO
+
 feature:
   encryption:
     messaging:
