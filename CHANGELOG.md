@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.0 - (2023-08-02)
+* Make logging configurable in application.yml
+* Update schedule creation fragment
+
 ## 1.11.0 - (2023-07-11)
 * Updated spring logging for production
 * Update fragment

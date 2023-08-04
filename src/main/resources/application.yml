@@ -57,7 +57,7 @@ spring:
       fail-on-unknown-properties: true
   logging:
     level:
-      ROOT: INFO
+      ROOT: ${LOG_LEVEL:INFO}
 
 feature:
   encryption:
