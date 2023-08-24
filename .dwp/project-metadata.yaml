@@ -1,0 +1,19 @@
+$schema: https://gitlab.com/dwp/secure-development/schema/project-metadata/-/raw/v1.0.0/schema/project-metadata.json
+
+schema_version: 1.0.0
+
+project:
+  - project_id: 28555026
+    component_name: ms-claim
+
+    version: 1.13.0
+
+    last_verified:
+      date: "2023-08-23"
+      name: "@louise.oliver1"
+
+    tags:
+      payments: false
+      personally_identifying_information: true
+
+    cmdb_id: 6f5de9ec6f20cb80a16b7e952e3ee41e

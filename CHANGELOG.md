@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.13.0 - (2023-08-23)
+* Added project metadata
+* Updated base docker image
+
 # 1.12.0 - (2023-08-02)
 * Make logging configurable in application.yml
 * Update schedule creation fragment

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>uk.gov.dwp.health.atw</groupId>
 	<artifactId>ms-claim</artifactId>
-	<version>1.12.0</version>
+	<version>1.13.0</version>
 	<name>ms-claim</name>
 	<description>Claim service for AtW</description>
 	<properties>

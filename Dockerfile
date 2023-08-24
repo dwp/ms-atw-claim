@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java11@sha256:e65ff03cf2bee3e2ea2a3fd26a49e5595be4f8d3df0e34454f32b06fc7a83753
+FROM gcr.io/distroless/java11@sha256:a4dcd554d29a3977a57eba4e8305867f6a7f231261202e4fc93359642ef73807
 
 EXPOSE 9014
 
