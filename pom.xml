@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.12</version>
+		<version>2.7.17</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>uk.gov.dwp.health.atw</groupId>
 	<artifactId>ms-claim</artifactId>
-	<version>1.13.0</version>
+	<version>1.14.0</version>
 	<name>ms-claim</name>
 	<description>Claim service for AtW</description>
 	<properties>
@@ -32,6 +32,7 @@
 		<sonar.coverage.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.coverage.exclusions>
 		<snakeyaml.version>1.33</snakeyaml.version> <!-- Override default version used within Spring Boot (1.30) to fix CVE-2022-25857 -->
 		<jackson-databind.version>2.13.5</jackson-databind.version>
+		<tomcat.version>9.0.82</tomcat.version><!-- Override default version used within Spring Boot to fix CVE-2023-44487, CVE-2023-42794, CVE-2023-42795, CVE-2023-45648 -->
 	</properties>
 	<dependencies>
 		<dependency>
