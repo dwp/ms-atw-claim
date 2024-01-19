@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType;
-import uk.gov.dwp.health.atw.msclaim.models.exceptions.ClaimException;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.responses.ClaimResponse;
 import uk.gov.dwp.health.atw.msclaim.strategies.ClaimSubmissionStrategy;

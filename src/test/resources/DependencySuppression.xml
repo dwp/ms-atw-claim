@@ -9,8 +9,6 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
 ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework.*$</packageUrl>
         <cve>CVE-2016-1000027</cve>
-        <cve>CVE-2023-20861</cve>
-        <cve>CVE-2023-20860</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -18,8 +16,6 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.yaml.snakeyaml.*$</packageUrl>
         <cve>CVE-2022-1471</cve>
-        <cve>CVE-2021-4235</cve>
-        <cve>CVE-2022-3064</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -27,6 +23,7 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.bouncycastle.*$</packageUrl>
         <cve>CVE-2022-45146</cve>
+        <cve>CVE-2023-33202</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -34,5 +31,20 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/com\.fasterxml.*$</packageUrl>
         <cve>CVE-2023-35116</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: logback* // this is temporary until logback releases a fix.
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/ch\.qos.logback.*$</packageUrl>
+        <cve>CVE-2023-6378</cve>
+        <cve>CVE-2023-6481</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: amazon.ion* // this is temporary until amazon.ion releases a fix.
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/software\.amazon.ion.*$</packageUrl>
+        <cve>CVE-2024-21634</cve>
     </suppress>
 </suppressions>

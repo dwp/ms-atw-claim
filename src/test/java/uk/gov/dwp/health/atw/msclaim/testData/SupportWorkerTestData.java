@@ -60,11 +60,12 @@ public class SupportWorkerTestData {
       .minutesOfSupport(30)
       .build();
 
-  public static final SupportWorkerClaim supportWorkerClaimWithTimeOfSupport3Hours30Mins = SupportWorkerClaim.builder()
-      .dayOfSupport(2)
-      .timeOfSupport(timeOfSupport3Hours30Mins)
-      .nameOfSupport("Person 2")
-      .build();
+  public static final SupportWorkerClaim supportWorkerClaimWithTimeOfSupport3Hours30Mins =
+      SupportWorkerClaim.builder()
+          .dayOfSupport(2)
+          .timeOfSupport(timeOfSupport3Hours30Mins)
+          .nameOfSupport("Person 2")
+          .build();
 
   public static final SupportWorker supportWorkerClaimForOneMonth = SupportWorker.builder()
       .monthYear(monthYearOfSupport)
@@ -87,14 +88,17 @@ public class SupportWorkerTestData {
           .workplaceContact(emailAndFullNameWorkplaceContact)
           .build();
 
-  private static final SupportWorkerClaim supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport = SupportWorkerClaim.builder()
-      .dayOfSupport(1)
-      .build();
+  private static final SupportWorkerClaim supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport =
+      SupportWorkerClaim.builder()
+          .dayOfSupport(1)
+          .build();
 
-  private static final SupportWorker supportWorkerWithoutHoursOfSupportAndTimeOfSupport = SupportWorker.builder()
-      .monthYear(monthYearOfSupport)
-      .claim(asList(supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport, supportWorkerClaimWithTimeOfSupport3Hours30Mins))
-      .build();
+  private static final SupportWorker supportWorkerWithoutHoursOfSupportAndTimeOfSupport =
+      SupportWorker.builder()
+          .monthYear(monthYearOfSupport)
+          .claim(asList(supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport,
+              supportWorkerClaimWithTimeOfSupport3Hours30Mins))
+          .build();
 
   public static final SupportWorkerClaimRequest invalidSupportWorkerClaimRequestWithoutHoursOfSupportAndTimeOfSupport =
       SupportWorkerClaimRequest.builder()
@@ -112,16 +116,19 @@ public class SupportWorkerTestData {
           .workplaceContact(emailAndFullNameWorkplaceContact)
           .build();
 
-  private static final SupportWorkerClaim supportWorkerClaimBothHoursOfSupportAndTimeOfSupport = SupportWorkerClaim.builder()
-      .dayOfSupport(1)
-      .timeOfSupport(timeOfSupport3Hours30Mins)
-      .hoursOfSupport(3.15)
-      .build();
+  private static final SupportWorkerClaim supportWorkerClaimBothHoursOfSupportAndTimeOfSupport =
+      SupportWorkerClaim.builder()
+          .dayOfSupport(1)
+          .timeOfSupport(timeOfSupport3Hours30Mins)
+          .hoursOfSupport(3.15)
+          .build();
 
-  private static final SupportWorker supportWorkerBothHoursOfSupportAndTimeOfSupport = SupportWorker.builder()
-      .monthYear(monthYearOfSupport)
-      .claim(asList(supportWorkerClaimBothHoursOfSupportAndTimeOfSupport, supportWorkerClaimWithTimeOfSupport3Hours30Mins))
-      .build();
+  private static final SupportWorker supportWorkerBothHoursOfSupportAndTimeOfSupport =
+      SupportWorker.builder()
+          .monthYear(monthYearOfSupport)
+          .claim(asList(supportWorkerClaimBothHoursOfSupportAndTimeOfSupport,
+              supportWorkerClaimWithTimeOfSupport3Hours30Mins))
+          .build();
 
   public static final SupportWorkerClaimRequest invalidSupportWorkerClaimRequestBothHoursOfSupportAndTimeOfSupport =
       SupportWorkerClaimRequest.builder()
@@ -144,8 +151,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -162,8 +169,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -181,8 +188,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -200,8 +207,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -218,8 +225,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -235,8 +242,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -250,8 +257,8 @@ public class SupportWorkerTestData {
       SupportWorkerClaimRequest.builder()
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -267,8 +274,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -285,8 +292,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -321,8 +328,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.EQUIPMENT_OR_ADAPTATION)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
@@ -340,8 +347,8 @@ public class SupportWorkerTestData {
           .nino(NINO)
           .claimType(ClaimType.SUPPORT_WORKER)
           .cost(COST)
-                .hasContributions(true)
-.atwNumber(ATW_NUMBER)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)

@@ -92,6 +92,106 @@ Submit a claim to be saved in the mongo database
 }
 ```
 
+### POST /submit for Adaptation To Vehicle
+
+Submit a claim to be saved in the mongo database
+
+#### Body (all fields are required)
+
+```json5
+{
+  "claimType": "ADAPTATION_TO_VEHICLE",
+  "nino": "AA370773A",
+  "atwNumber": "ATW1234567895",
+  "declarationVersion": 2.1,
+  "claim": {
+    "0": {
+      "claimDescription": {
+        "description": "Item 1",
+        "dateOfInvoice": {
+          "dd": "22",
+          "mm": "11",
+          "yyyy": "2020"
+        }
+      }
+    },
+    "1": {
+      "claimDescription": {
+        "description": "Item 2",
+        "dateOfInvoice": {
+          "dd": "2",
+          "mm": "11",
+          "yyyy": "2020"
+        }
+      }
+    }
+  },
+  "cost": "2211",
+  "hasContributions": true,
+  "evidence": [
+    {
+      "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
+      "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
+    }
+  ],
+  "payee": {
+    "newPayee": true, //for AV newPayee must be true
+    "details": {
+      "fullName": "George Herbert",
+      "emailAddress": "name@name.com"
+    },
+    "address": {
+      "address1": "THE COTTAGE",
+      "address2": "ST. MARYS ISLAND", // Optional
+      "address3": "WHITLEY BAY",
+      "address4": "WHITLEY BAY", // Optional
+      "postcode": "NE26 4RS"
+    },
+    "bankDetails": {
+      "accountHolderName": "George Herbert",
+      "sortCode": "000004",
+      "accountNumber": "12345677",
+      "rollNumber": "12345677"// Optional
+    }
+  },
+  "claimant": {
+    "forename": "Odin",
+    "surname": "Surtsson",
+    "dateOfBirth": "1930-11-22",
+    "emailAddress": "Odin.Surtsson@gmail.com",
+    "homeNumber": "01277777777", 
+    "mobileNumber": "07700900630",
+    "company": "Company 1",
+    "address": {
+      "address1": "1 The Street",
+      "address2": "Village Name",
+      "address3": "Town",
+      "address4": "County",
+      "postcode": "NE26 4RS"
+    }
+  },
+  "journeyContext": { // This is the data as it is saved in Casa
+    "data": {
+      "equipment-cost": {
+        "cost": 123.2
+      }
+    }
+  }
+}
+```
+
+#### Response
+
+201 - Created
+
+```json5
+{
+  "claimReference": "AV15",
+  "claimNumber": 15,
+  "claimType": "ADAPTATION_TO_VEHICLE"
+}
+```
+
 ### POST /submit for Support Worker
 
 Submit a claim to be saved in the mongo database

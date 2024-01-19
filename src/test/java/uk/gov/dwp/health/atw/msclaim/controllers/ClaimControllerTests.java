@@ -7,7 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.ADAPTATION_TO_VEHICLE;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.EQUIPMENT_OR_ADAPTATION;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.claimResponseAv;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.invalidAVClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedAdaptationToVehicleRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.claimResponseEa;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.invalidEAClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.invalidNinoClaim;
@@ -16,6 +21,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestDa
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.claimResponseSw;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedRejectedSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.adaptationToVehicleClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.claimRetrievalRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.documentUploadRequestWithRequestId;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.equipmentOrAdaptationsClaimResponse;
@@ -25,6 +31,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.rejectedClaimsForN
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.rejectedClaimsForNinoCountResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.supportWorkerClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelToWorkClaimResponse;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceNinoForTravelToWorkClaim;
@@ -40,10 +47,12 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.upload
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftTravelToWorkSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateSupportWorkerWorkplaceContactInformationRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateWorkplaceContactForSupportWorkerClaimOneMonthRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidAcceptedAdaptationToVehicleClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectedSupportWorkerWorkplaceContactReasonOver300Char;
-import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedEquipmentOrAdaptationClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidAcceptedEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedTravelToWorkClaim;
-import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectEquipmentOrAdaptationClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedSupportWorkerClaim;
 import static uk.gov.dwp.health.atw.msclaim.utils.TestUtils.asJsonString;
 
@@ -71,6 +80,7 @@ import uk.gov.dwp.health.atw.msclaim.models.exceptions.ClaimCannotBeCounterSigne
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.ClaimHasWrongStatusException;
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.NoClaimRecordFoundException;
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.WrongClaimOrBadRequestException;
+import uk.gov.dwp.health.atw.msclaim.models.requests.AdaptationToVehicleClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EquipmentOrAdaptationClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.TravelToWorkClaimRequest;
@@ -114,6 +124,22 @@ class ClaimControllerTests {
   }
 
   @Test
+  @DisplayName("/submit creates record successfully - Adaptation To Vehicle")
+  void submitRecordOkAv() throws Exception {
+
+    when(databaseSequenceRepository.getNextValueInSequence(any(String.class))).thenReturn(5L);
+
+    when(claimSubmissionService.submitClaim(any(AdaptationToVehicleClaimRequest.class), eq(5L)))
+        .thenReturn(claimResponseAv);
+
+    mockMvc.perform(post("/submit")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(validAdaptationToVehicleSubmitRequest)))
+        .andExpect(status().isCreated())
+        .andExpect(content().json(asJsonString(adaptationToVehicleClaimResponse)));
+  }
+
+  @Test
   @DisplayName("/submit creates record successfully -TW")
   void submitRecordOkTW() throws Exception {
 
@@ -130,11 +156,35 @@ class ClaimControllerTests {
   }
 
   @Test
+  @DisplayName("/submit creates record for successfully - SW")
+  void submitRecordForSupportWorkerOk() throws Exception {
+    when(databaseSequenceRepository.getNextValueInSequence(any(String.class))).thenReturn(5L);
+
+    when(claimSubmissionService.submitClaim(any(SupportWorkerClaimRequest.class), eq(5L)))
+        .thenReturn(claimResponseSw);
+
+    mockMvc.perform(post("/submit")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(validSupportWorkerClaimRequest)))
+        .andExpect(status().isCreated())
+        .andExpect(content().json(asJsonString(supportWorkerClaimResponse)));
+  }
+
+  @Test
   @DisplayName("/submit for EA with previousclaimid and return 400 error -  EA")
   void submitRecordWithPreviousClaimId() throws Exception {
     mockMvc.perform(post("/submit")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(invalidEAClaim)))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("/submit for AV with previousClaimId and return 400 error -  AV")
+  void submitAdaptionToVehicleRecordWithPreviousClaimId() throws Exception {
+    mockMvc.perform(post("/submit")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(invalidAVClaim)))
         .andExpect(status().isBadRequest());
   }
 
@@ -170,21 +220,6 @@ class ClaimControllerTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(validLiftTravelToWorkSubmitRequest)))
         .andExpect(status().isConflict());
-  }
-
-  @Test
-  @DisplayName("/submit creates record for support worker successfully")
-  void submitRecordForSupportWorkerOk() throws Exception {
-    when(databaseSequenceRepository.getNextValueInSequence(any(String.class))).thenReturn(5L);
-
-    when(claimSubmissionService.submitClaim(any(SupportWorkerClaimRequest.class), eq(5L)))
-        .thenReturn(claimResponseSw);
-
-    mockMvc.perform(post("/submit")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(validSupportWorkerClaimRequest)))
-        .andExpect(status().isCreated())
-        .andExpect(content().json(asJsonString(supportWorkerClaimResponse)));
   }
 
   @Test
@@ -263,9 +298,25 @@ class ClaimControllerTests {
 
     mockMvc.perform(put("/accept")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(validAcceptedEquipmentOrAdaptationClaim)))
+            .content(asJsonString(invalidAcceptedEquipmentOrAdaptationClaim)))
         .andExpect(status().isBadRequest())
         .andExpect(content().string("EQUIPMENT_OR_ADAPTATION cannot be counter sign accepted"));
+  }
+
+  @Test
+  @DisplayName("/accept failed due to claim type being adaptation to vehicle")
+  void acceptWorkplaceContactWithClaimTypeIsAdaptationToVehicle() throws Exception {
+    when(claimService.counterSignHandler(eq(CounterSignType.ACCEPT),
+        any(WorkplaceContactRequest.class)))
+        .thenThrow(new WrongClaimOrBadRequestException(
+            submittedAdaptationToVehicleRequest.getClaimType() +
+                " cannot be counter sign accepted"));
+
+    mockMvc.perform(put("/accept")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(invalidAcceptedAdaptationToVehicleClaim)))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string("ADAPTATION_TO_VEHICLE cannot be counter sign accepted"));
   }
 
   @Test
@@ -320,9 +371,25 @@ class ClaimControllerTests {
 
     mockMvc.perform(put("/reject")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(validRejectEquipmentOrAdaptationClaim)))
+            .content(asJsonString(invalidRejectEquipmentOrAdaptationClaim)))
         .andExpect(status().isBadRequest())
         .andExpect(content().string("EQUIPMENT_OR_ADAPTATION cannot be counter sign rejected"));
+  }
+
+  @Test
+  @DisplayName("/reject failed due to claim type being adaptation to vehicle")
+  void rejectWorkplaceContactWithClaimTypeIsAdaptationToVehicle() throws Exception {
+    when(claimService.counterSignHandler(eq(CounterSignType.REJECT),
+        any(WorkplaceContactRequest.class)))
+        .thenThrow(new WrongClaimOrBadRequestException(
+            submittedAdaptationToVehicleRequest.getClaimType() +
+                " cannot be counter sign rejected"));
+
+    mockMvc.perform(put("/reject")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(invalidRejectAdaptationToVehicleClaim)))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string("ADAPTATION_TO_VEHICLE cannot be counter sign rejected"));
   }
 
   @Test
@@ -391,7 +458,6 @@ class ClaimControllerTests {
             .content(asJsonString(invalidClaimReferenceNinoForTravelToWorkClaim)))
         .andExpect(status().isBadRequest())
         .andExpect(content().string("Claim number is not a number TW0001SW"));
-
   }
 
   @Test
@@ -408,8 +474,8 @@ class ClaimControllerTests {
   }
 
   @Test
-  @DisplayName("/claim-to-workplace-contact failed due to invalid claim reference")
-  void returnNotFoundForClaimRequestToWorkplaceContactFromClaimReference() throws Exception {
+  @DisplayName("/claim-to-workplace-contact failed due to invalid claim reference -EA")
+  void returnNotFoundForClaimRequestToWorkplaceContactFromClaimReferenceForEA() throws Exception {
     when(claimService.findClaimRequestToWorkplaceContact(any(ClaimReferenceRequest.class)))
         .thenThrow(new WrongClaimOrBadRequestException(
             EQUIPMENT_OR_ADAPTATION + " cannot be counter signed"));
@@ -431,6 +497,20 @@ class ClaimControllerTests {
     mockMvc.perform(post("/claim-to-workplace-contact")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(validClaimReferenceForEquipmentOrAdaptationClaim)))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("/claim-to-workplace-contact failed due to Adaptation To Vehicle claim type")
+  void returnNotFoundForClaimRequestToWorkplaceContactFromAdaptationToVehicleClaimType()
+      throws Exception {
+    when(claimService.findClaimRequestToWorkplaceContact(any(ClaimReferenceRequest.class)))
+        .thenThrow(new WrongClaimOrBadRequestException(
+            ADAPTATION_TO_VEHICLE + " cannot be counter signed"));
+
+    mockMvc.perform(post("/claim-to-workplace-contact")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(validClaimReferenceForAdaptationToVehicleClaim)))
         .andExpect(status().isBadRequest());
   }
 

@@ -16,6 +16,11 @@ import static org.mockito.Mockito.when;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.AWAITING_AGENT_APPROVAL;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.DRS_ERROR;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.UPLOADED_TO_DOCUMENT_BATCH;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedAdaptationToVehicleRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedAdaptationToVehicleTwoClaimsRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedInvalidAVdRequestWithPreviousId;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleSubmitRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleTwoClaimsSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.submittedEquipmentOrAdaptationRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.submittedInvalidEAdRequestWithPreviousId;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.existingSupportWorkerClaimRequest;
@@ -38,6 +43,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.invalidClaimRefere
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.nullRequestRejectedClaimsForNino;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.requestIdRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceNinoForTravelToWorkClaim;
@@ -46,6 +52,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.awaiti
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.drsErrorTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.existingTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidAcceptWorkplaceContactWithReasonDescriptionForTravelToWorkRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidAcceptWorkplaceContactWithoutDeclarationVersionForTravelToWorkRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidClaimForTravelToWorkWithPreviousIdRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidClaimTypeForTravelToWorkRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidSelfEmployedAwaitingCounterSignTravelToWorkClaimRequest;
@@ -59,9 +66,12 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.upload
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateSupportWorkerWorkplaceContactInformationRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateWorkplaceContactForSupportWorkerClaimOneMonthRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateWorkplaceContactForTravelToWorkClaimRequest;
-import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.inValidAcceptedSupportWorkerClaimMissingDeclarationVersion;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.inValidAcceptedTravelToWorkClaimMissingDeclarationVersion;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.inValidRejectedSupportWorkerClaimHasDeclarationVersion;
-import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedEquipmentOrAdaptationClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidAcceptedAdaptationToVehicleClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidAcceptedEquipmentOrAdaptationClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectAdaptationToVehicleClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedSupportWorkerClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedSupportWorkerClaim;
@@ -83,6 +93,7 @@ import uk.gov.dwp.health.atw.msclaim.models.exceptions.ClaimHasWrongStatusExcept
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.NoClaimRecordFoundException;
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.WrongClaimOrBadRequestException;
 import uk.gov.dwp.health.atw.msclaim.models.messaging.SubmitToClaimBundlerEvent;
+import uk.gov.dwp.health.atw.msclaim.models.requests.AdaptationToVehicleClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EquipmentOrAdaptationClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
@@ -106,12 +117,14 @@ class ClaimServiceTests {
   @MockBean
   private ClaimRepository<EquipmentOrAdaptationClaimRequest> equipmentOrAdaptationRepository;
   @MockBean
+  private ClaimRepository<AdaptationToVehicleClaimRequest> adaptationToVehicleRepository;
+  @MockBean
   private ClaimPublisher claimPublisher;
   @MockBean
   private EmailNotificationService emailNotificationService;
 
   @Test
-  @DisplayName("accept workplace contact successful")
+  @DisplayName("accept workplace contact successful - SW")
   void acceptWorkplaceContactSupportWorkerSuccessful() throws Exception {
     SupportWorkerClaimRequest spySupportWorkerClaimRequest =
         spy(existingSupportWorkerClaimRequest);
@@ -133,7 +146,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("accept workplace contact travel to work successful")
+  @DisplayName("accept workplace contact travel to work successful - TW")
   void acceptWorkplaceContactTravelToWorkSuccessful() throws Exception {
     TravelToWorkClaimRequest spyTravelToWorkClaimRequest =
         spy(existingTravelToWorkClaimRequest);
@@ -153,8 +166,9 @@ class ClaimServiceTests {
     verify(emailNotificationService, times(1)).notifyClaimantTheirClaimHasBeenApproved(
         any(ClaimRequest.class));
   }
+
   @Test
-  @DisplayName("accept failed as workplace contact is Equipment Or Adaptation")
+  @DisplayName("accept fail - workplace contact is Equipment Or Adaptation")
   void acceptWorkplaceContactEquipmentOrAdaptation() {
     when(equipmentOrAdaptationRepository.findClaimByIdAndClaimType(any(Long.class),
         any(String.class)))
@@ -162,7 +176,7 @@ class ClaimServiceTests {
     WrongClaimOrBadRequestException thrown =
         assertThrows(WrongClaimOrBadRequestException.class,
             () -> claimService.counterSignHandler(CounterSignType.ACCEPT,
-                validAcceptedEquipmentOrAdaptationClaim));
+                invalidAcceptedEquipmentOrAdaptationClaim));
 
     assertEquals("EQUIPMENT_OR_ADAPTATION cannot be a workplace contact",
         thrown.getErrorMessage());
@@ -172,7 +186,25 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("accept workplace contact no claim number found")
+  @DisplayName("accept fail - workplace contact is Adaptation To Vehicle")
+  void acceptWorkplaceContactAdaptationToVehicle() {
+    when(adaptationToVehicleRepository.findClaimByIdAndClaimType(any(Long.class),
+        any(String.class)))
+        .thenReturn(submittedAdaptationToVehicleRequest);
+    WrongClaimOrBadRequestException thrown =
+        assertThrows(WrongClaimOrBadRequestException.class,
+            () -> claimService.counterSignHandler(CounterSignType.ACCEPT,
+                invalidAcceptedAdaptationToVehicleClaim));
+
+    assertEquals("ADAPTATION_TO_VEHICLE cannot be a workplace contact",
+        thrown.getErrorMessage());
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenApproved(
+        any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("accept fail - workplace contact no claim number found")
   void acceptWorkplaceContactNoClaimNumberFound() {
     when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class),
         any(String.class))).thenReturn(null);
@@ -188,7 +220,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("accept workplace contact has wrong claim status")
+  @DisplayName("accept fail - workplace contact has wrong claim status")
   void acceptWorkplaceContactWithClaimStatusNotAwaitingCounterSign() {
     when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(submittedAcceptedTravelToWorkClaimRequest);
@@ -204,7 +236,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("accept workplace contact has Equipment And Adaptations claim type")
+  @DisplayName("accept fail - workplace contact has Equipment or Adaptations claim type for Travel to Work Workplace Contact Request")
   void acceptWorkplaceContactWithEquipAndAdaptationsClaimType() {
     when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(invalidClaimTypeForTravelToWorkRequest);
@@ -220,7 +252,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("accept workplace contact with a reason description")
+  @DisplayName("accept fail - workplace contact with a reason description")
   void acceptWorkplaceContactWithReasonDescription() {
     when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(invalidAcceptWorkplaceContactWithReasonDescriptionForTravelToWorkRequest);
@@ -236,13 +268,14 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("accept workplace contact with a reason description")
+  @DisplayName("accept fail - workplace contact without a declaration version")
   void acceptWorkplaceContactWithoutDeclarationVersion() {
     when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
-        .thenReturn(invalidAcceptWorkplaceContactWithReasonDescriptionForTravelToWorkRequest);
+        .thenReturn(invalidAcceptWorkplaceContactWithoutDeclarationVersionForTravelToWorkRequest);
+
     WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
         () -> claimService.counterSignHandler(CounterSignType.ACCEPT,
-            inValidAcceptedSupportWorkerClaimMissingDeclarationVersion));
+            inValidAcceptedTravelToWorkClaimMissingDeclarationVersion));
 
     assertEquals("Declaration Version is required when not rejecting claim",
         thrown.getErrorMessage());
@@ -252,7 +285,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact successful")
+  @DisplayName("reject workplace contact successful - TW")
   void rejectWorkplaceContactTravelToWorkSuccessful() throws ClaimException {
     TravelToWorkClaimRequest spyTravelToWorkClaimRequest =
         spy(existingTravelToWorkClaimRequest);
@@ -274,7 +307,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact successful")
+  @DisplayName("reject workplace contact successful - SW")
   void rejectWorkplaceContactSupportWorkerSuccessful() throws ClaimException {
     SupportWorkerClaimRequest spySupportWorkerClaimRequest =
         spy(existingSupportWorkerClaimRequest);
@@ -296,14 +329,14 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject failed as workplace contact is Equipment Or Adaptation")
+  @DisplayName("reject fail - workplace contact is Equipment Or Adaptation")
   void rejectWorkplaceContactEquipmentOrAdaptation() {
     when(equipmentOrAdaptationRepository.findClaimByIdAndClaimType(any(Long.class),
         any(String.class)))
         .thenReturn(submittedEquipmentOrAdaptationRequest);
     WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
         () -> claimService.counterSignHandler(CounterSignType.REJECT,
-            validAcceptedEquipmentOrAdaptationClaim));
+            invalidRejectEquipmentOrAdaptationClaim));
 
     assertEquals("EQUIPMENT_OR_ADAPTATION cannot be a workplace contact",
         thrown.getErrorMessage());
@@ -313,7 +346,24 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact no claim number found")
+  @DisplayName("reject fail - workplace contact is Adaptation To Vehicle")
+  void rejectWorkplaceContactAdaptationToVehicle() {
+    when(adaptationToVehicleRepository.findClaimByIdAndClaimType(any(Long.class),
+        any(String.class)))
+        .thenReturn(submittedAdaptationToVehicleRequest);
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.counterSignHandler(CounterSignType.REJECT,
+            invalidRejectAdaptationToVehicleClaim));
+
+    assertEquals("ADAPTATION_TO_VEHICLE cannot be a workplace contact",
+        thrown.getErrorMessage());
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenRejected(
+        any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("reject fail - workplace contact no claim number found")
   void rejectWorkplaceContactWithNoClaimNumberFound() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class),
         any(String.class))).thenReturn(null);
@@ -330,7 +380,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact has wrong claim status")
+  @DisplayName("reject fail - workplace contact has wrong claim status")
   void rejectWorkplaceContactWithClaimStatusNotAwaitingCounterSign() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(submittedRejectedSupportWorkerClaimRequest);
@@ -345,7 +395,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact has Equipment And Adaptations claim type")
+  @DisplayName("reject fail - workplace contact has Equipment And Adaptations claim type")
   void rejectWorkplaceContactWithEquipAndAdaptationsClaimType() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(invalidClaimTypeSupportWorkerClaimRequest);
@@ -360,7 +410,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact with empty reason description")
+  @DisplayName("reject fail - workplace contact with empty reason description")
   void rejectWorkplaceContactWithEmptyReasonDescription() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(
@@ -376,7 +426,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject workplace contact with empty reason description")
+  @DisplayName("reject fail - workplace contact with empty reason description")
   void rejectWorkplaceContactWithDeclarationVersion() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(
@@ -515,12 +565,35 @@ class ClaimServiceTests {
   }
 
   @Test
+  @DisplayName("find claim request to workplace contact failed with Adaptation To Vehicle claim type")
+  void findClaimRequestToCounterSignWithAdaptationToVehicle() {
+    when(claimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
+        .thenReturn(submittedAdaptationToVehicleRequest);
+
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.findClaimRequestToWorkplaceContact(
+            validClaimReferenceForAdaptationToVehicleClaim));
+
+    assertEquals("ADAPTATION_TO_VEHICLE cannot be a workplace contact",
+        thrown.getErrorMessage());
+  }
+
+  @Test
   @DisplayName("Find claims by Nino and Type")
   void findClaimsByNinoAndType() {
     when(claimRepository.findClaimsByNinoAndClaimType(any(String.class), any(String.class)))
         .thenReturn(List.of(submittedEquipmentOrAdaptationRequest));
     assertEquals(claimService.findClaimsForNinoAndType(claimRetrievalRequest),
         List.of(submittedEquipmentOrAdaptationRequest));
+  }
+
+  @Test
+  @DisplayName("Find claims by Nino and Type -AV")
+  void findClaimsByNinoAndTypeAv() {
+    when(claimRepository.findClaimsByNinoAndClaimType(any(String.class), any(String.class)))
+        .thenReturn(List.of(submittedAdaptationToVehicleRequest));
+    assertEquals(claimService.findClaimsForNinoAndType(claimRetrievalRequest),
+        List.of(submittedAdaptationToVehicleRequest));
   }
 
   @Test
@@ -746,6 +819,19 @@ class ClaimServiceTests {
   }
 
   @Test
+  @DisplayName("Throw exception when claim is Adaptation To Vehicle")
+  void updateWorkplaceDetailsWhereClaimIsAdaptationToVehicleThrowsException() {
+    when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
+        .thenReturn(submittedAdaptationToVehicleRequest);
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.updateWorkplaceDetails(
+            updateSupportWorkerWorkplaceContactInformationRequest));
+
+    assertEquals("ADAPTATION_TO_VEHICLE cannot update workplace details",
+        thrown.getErrorMessage());
+  }
+
+  @Test
   @DisplayName("Throw exception when travel to work is self employed")
   void updateWorkplaceDetailsForSelfEmployedTravelWorkerThrowsException() {
     when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
@@ -814,6 +900,21 @@ class ClaimServiceTests {
   }
 
   @Test
+  @DisplayName("reject new AV claim when previousClaimId is set")
+  void rejectAVClaimWithPreviousClaimID() {
+
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.validateAndSaveActiveClaim(submittedInvalidAVdRequestWithPreviousId,
+            submittedInvalidAVdRequestWithPreviousId.getId()));
+
+    assertEquals("ADAPTATION_TO_VEHICLE cannot recreate previous claim",
+        thrown.getErrorMessage());
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenRejected(
+        any(ClaimRequest.class));
+  }
+
+  @Test
   @DisplayName("reject new TW - Self Employed claim when previousClaimId is set")
   void rejectTWEmployedClaimWithPreviousClaimID() {
 
@@ -848,7 +949,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("validate and save active claim")
+  @DisplayName("validate and save active claim - SW")
   void validateAndSaveActiveClaimSuccessful() {
 
     when(claimRepository.save(any()))
@@ -856,6 +957,17 @@ class ClaimServiceTests {
 
     assertThat(claimService.validateAndSaveActiveClaim(validSupportWorkerClaimRequest,
         validClaimNumber), samePropertyValuesAs(submittedSupportWorkerClaimForOneMonthRequest));
+  }
+
+  @Test
+  @DisplayName("validate and save active claim - AV")
+  void validateAndSaveActiveAdaptationToVehicleClaimSuccessful() {
+
+    when(claimRepository.save(any()))
+        .thenReturn(submittedAdaptationToVehicleRequest);
+
+    assertThat(claimService.validateAndSaveActiveClaim(validAdaptationToVehicleSubmitRequest,
+        validClaimNumber), samePropertyValuesAs(submittedAdaptationToVehicleRequest));
   }
 }
 

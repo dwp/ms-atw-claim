@@ -8,8 +8,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.validEquipmentOrAdaptationSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.adaptationToVehicleClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.equipmentOrAdaptationsClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.supportWorkerClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelToWorkClaimResponse;
@@ -23,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.responses.ClaimResponse;
+import uk.gov.dwp.health.atw.msclaim.strategies.AdaptationToVehicleSubmissionStrategy;
 import uk.gov.dwp.health.atw.msclaim.strategies.EquipmentOrAdaptationsSubmissionStrategy;
 import uk.gov.dwp.health.atw.msclaim.strategies.SupportWorkerSubmissionStrategy;
 import uk.gov.dwp.health.atw.msclaim.strategies.TravelToWorkSubmissionStrategy;
@@ -32,6 +35,7 @@ class ClaimSubmissionServiceTests {
   private EquipmentOrAdaptationsSubmissionStrategy equipmentOrAdaptationsSubmissionStrategy;
   private SupportWorkerSubmissionStrategy supportWorkerSubmissionStrategy;
   private TravelToWorkSubmissionStrategy travelToWorkSubmissionStrategy;
+  private AdaptationToVehicleSubmissionStrategy adaptationToVehicleSubmissionStrategy;
 
   ClaimSubmissionService claimSubmissionService;
 
@@ -53,8 +57,13 @@ class ClaimSubmissionServiceTests {
             any(long.class))).thenReturn(travelToWorkClaimResponse);
     when(travelToWorkSubmissionStrategy.getSupportedClaimType()).thenReturn(ClaimType.TRAVEL_TO_WORK);
 
+    adaptationToVehicleSubmissionStrategy = mock(AdaptationToVehicleSubmissionStrategy.class);
+    when(adaptationToVehicleSubmissionStrategy.submit(any(ClaimRequest.class),
+            any(long.class))).thenReturn(adaptationToVehicleClaimResponse);
+    when(adaptationToVehicleSubmissionStrategy.getSupportedClaimType()).thenReturn(ClaimType.ADAPTATION_TO_VEHICLE);
+
     claimSubmissionService = new ClaimSubmissionService(asList(equipmentOrAdaptationsSubmissionStrategy,
-            supportWorkerSubmissionStrategy, travelToWorkSubmissionStrategy));
+            supportWorkerSubmissionStrategy, travelToWorkSubmissionStrategy, adaptationToVehicleSubmissionStrategy));
   }
 
   @Test
@@ -115,5 +124,27 @@ class ClaimSubmissionServiceTests {
             any(long.class));
     verify(supportWorkerSubmissionStrategy, never()).submit(any(ClaimRequest.class),
             any(long.class));
+  }
+
+  @Test
+  @DisplayName("Use appropriate strategy for a claim - AV")
+  void useAppropriateStrategyForAVClaim() {
+
+    ClaimResponse claimResponse =
+        claimSubmissionService.submitClaim(validAdaptationToVehicleSubmitRequest,
+            validClaimNumber);
+
+    assertEquals(adaptationToVehicleClaimResponse.getClaimType(), claimResponse.getClaimType());
+    assertEquals(adaptationToVehicleClaimResponse.getClaimNumber(), claimResponse.getClaimNumber());
+    assertEquals(adaptationToVehicleClaimResponse.getClaimReference(), claimResponse.getClaimReference());
+
+    verify(adaptationToVehicleSubmissionStrategy, times(1)).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(equipmentOrAdaptationsSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelToWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(supportWorkerSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
   }
 }

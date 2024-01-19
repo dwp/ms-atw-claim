@@ -6,6 +6,7 @@ import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.AWAITING_DR
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.COUNTER_SIGN_REJECTED;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.DRS_ERROR;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.REPLACED_BY_NEW_CLAIM;
+import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.ADAPTATION_TO_VEHICLE;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.EQUIPMENT_OR_ADAPTATION;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.SUPPORT_WORKER;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.TRAVEL_TO_WORK;
@@ -165,6 +166,10 @@ public class ClaimService {
         throw new WrongClaimOrBadRequestException(EQUIPMENT_OR_ADAPTATION
             + CANNOT_RE_CREATE_PREVIOUS_CLAIM);
       }
+      if (claimRequest.getClaimType() == ADAPTATION_TO_VEHICLE) {
+        throw new WrongClaimOrBadRequestException(ADAPTATION_TO_VEHICLE
+            + CANNOT_RE_CREATE_PREVIOUS_CLAIM);
+      }
       if (claimRequest instanceof TravelToWorkClaimRequest) {
 
         TravelToWorkClaimRequest travelToWorkClaimRequest = (TravelToWorkClaimRequest) claimRequest;
@@ -229,10 +234,16 @@ public class ClaimService {
   public ClaimRequest findClaimRequestToWorkplaceContact(ClaimReferenceRequest claimReference)
       throws ClaimException {
 
+    System.out.println("claimReference.getClaimType(): " + claimReference.getClaimType());
     if (claimReference.getClaimType()
         .equals(EQUIPMENT_OR_ADAPTATION.toString())) {
       throw new WrongClaimOrBadRequestException(
           EQUIPMENT_OR_ADAPTATION + CANNOT_BE_WORKPLACE_CONTACT);
+    }
+    if (claimReference.getClaimType()
+        .equals(ADAPTATION_TO_VEHICLE.toString())) {
+      throw new WrongClaimOrBadRequestException(
+          ADAPTATION_TO_VEHICLE + CANNOT_BE_WORKPLACE_CONTACT);
     }
 
     ClaimRequest claimRequest =
@@ -357,7 +368,9 @@ public class ClaimService {
             updateClaimRequest.getClaimNumber(), updateClaimRequest.getClaimType(),
             updateClaimRequest.getNino());
 
-    if (claimRequest.getClaimType() != EQUIPMENT_OR_ADAPTATION) {
+    if (claimRequest.getClaimType() != EQUIPMENT_OR_ADAPTATION
+        && claimRequest.getClaimType() != ADAPTATION_TO_VEHICLE) {
+
       if (!claimRequest.getClaimStatus().equals(AWAITING_COUNTER_SIGN)) {
         throw new ClaimCannotBeCounterSignedException(
             "Cannot be updated as it does not have the status AWAITING_COUNTER_SIGN");

@@ -4,6 +4,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import java.time.LocalDate;
+import uk.gov.dwp.health.atw.msclaim.models.AdaptationToVehicle;
+import uk.gov.dwp.health.atw.msclaim.models.AdaptationToVehicleClaim;
 import uk.gov.dwp.health.atw.msclaim.models.Address;
 import uk.gov.dwp.health.atw.msclaim.models.BankDetails;
 import uk.gov.dwp.health.atw.msclaim.models.ClaimReferenceNinoRequest;
@@ -71,6 +73,9 @@ public class TestData {
   public static final ClaimResponse equipmentOrAdaptationsClaimResponse =
       ClaimResponse.of(validClaimNumber, ClaimType.EQUIPMENT_OR_ADAPTATION);
 
+  public static final ClaimResponse adaptationToVehicleClaimResponse =
+      ClaimResponse.of(validClaimNumber, ClaimType.ADAPTATION_TO_VEHICLE);
+
   public static final ClaimResponse travelToWorkClaimResponse =
       ClaimResponse.of(validClaimNumber, ClaimType.TRAVEL_TO_WORK);
 
@@ -128,6 +133,15 @@ public class TestData {
 
   public static final List<EquipmentOrAdaptation> equipmentOrAdaptations =
       singletonList(equipmentOrAdaptation);
+
+  public static final AdaptationToVehicleClaim adaptationToVehicleClaim = AdaptationToVehicleClaim.builder()
+      .description("Item 1")
+      .dateOfInvoice(dateOfPurchase)
+      .build();
+
+  public static final AdaptationToVehicle singleAdaptationToVehicleClaim = AdaptationToVehicle.builder()
+          .claimDescription(singletonList(adaptationToVehicleClaim))
+          .build();
 
   public static final Evidence evidence = Evidence.builder()
       .fileId("633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3")
@@ -264,6 +278,11 @@ public class TestData {
   public static final ClaimReferenceRequest validClaimReferenceForEquipmentOrAdaptationClaim =
       ClaimReferenceRequest.builder()
           .claimReference("EA000" + validClaimNumber)
+          .build();
+
+  public static final ClaimReferenceRequest validClaimReferenceForAdaptationToVehicleClaim =
+      ClaimReferenceRequest.builder()
+          .claimReference("AV000" + validClaimNumber)
           .build();
 
    public static final NinoRequest validRequestRejectedClaimsForNino =

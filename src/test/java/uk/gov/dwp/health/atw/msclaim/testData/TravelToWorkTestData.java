@@ -21,6 +21,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.ac
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.acceptedWorkplaceContactResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.emailAndFullNameWorkplaceContact;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.emailOnlyWorkplaceContact;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidAcceptedTravelToWorkClaimNoDeclarationVersion;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidEmploymentStatusWorkplaceContact;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidSelfEmployedWorkplaceContact;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidTravelToWorkEmployedWithoutFullNameOrEmailAddressWorkplaceContact;
@@ -605,6 +606,25 @@ public class TravelToWorkTestData {
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(rejectedWorkplaceContactResponse)
+          .build();
+
+  public static final TravelToWorkClaimRequest
+      invalidAcceptWorkplaceContactWithoutDeclarationVersionForTravelToWorkRequest =
+      TravelToWorkClaimRequest.builder()
+          .id(validTravelToWorkClaim.getId())
+          .nino(validTravelToWorkClaim.getNino())
+          .claimType(ClaimType.TRAVEL_TO_WORK)
+          .cost(validTravelToWorkClaim.getCost())
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .payee(validTravelToWorkClaim.getPayee())
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .travelDetails(travelDetailsForLiftWithMiles)
+          .claim(singletonMap("0", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(invalidAcceptedTravelToWorkClaimNoDeclarationVersion)
           .build();
 
   public static final TravelToWorkClaimRequest invalidClaimForTravelToWorkWithPreviousIdRequest =

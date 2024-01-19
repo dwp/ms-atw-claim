@@ -80,6 +80,16 @@ public class WorkplaceContactTestData {
       .updatedOn(LocalDateTime.now())
       .build();
 
+  public static WorkplaceContact invalidAcceptedTravelToWorkClaimNoDeclarationVersion =
+      WorkplaceContact.builder()
+          .emailAddress("email@company.com")
+          .organisation("Organisation")
+          .jobTitle("boss")
+          .address(address)
+          .declarationVersion(1.0)
+          .updatedOn(LocalDateTime.now())
+          .build();
+
   public static WorkplaceContactRequest
       invalidRejectedSupportWorkerWorkplaceContactReasonOver300Char =
       WorkplaceContactRequest.builder()
@@ -88,7 +98,7 @@ public class WorkplaceContactTestData {
           .organisation("Organisation")
           .jobTitle("boss")
           .address(address)
-              .declarationVersion(1.0)
+          .declarationVersion(1.0)
           .reason(
               "nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vita")
           .build();
@@ -103,7 +113,7 @@ public class WorkplaceContactTestData {
               .declarationVersion(1.0)
           .build();
 
-  public static WorkplaceContactRequest inValidAcceptedSupportWorkerClaimMissingDeclarationVersion =
+  public static WorkplaceContactRequest inValidAcceptedTravelToWorkClaimMissingDeclarationVersion =
           WorkplaceContactRequest.builder()
                   .claimNumber(validClaimNumber)
                   .claimType(ClaimType.TRAVEL_TO_WORK)
@@ -150,11 +160,11 @@ public class WorkplaceContactTestData {
           .claimType(ClaimType.TRAVEL_TO_WORK)
           .organisation("Organisation")
           .jobTitle("boss")
-              .declarationVersion(1.0)
+          .declarationVersion(1.0)
           .address(address)
           .build();
 
-  public static WorkplaceContactRequest validAcceptedEquipmentOrAdaptationClaim =
+  public static WorkplaceContactRequest invalidAcceptedEquipmentOrAdaptationClaim =
       WorkplaceContactRequest.builder()
           .claimNumber(validClaimNumber)
           .claimType(ClaimType.EQUIPMENT_OR_ADAPTATION)
@@ -163,10 +173,29 @@ public class WorkplaceContactTestData {
           .address(address)
           .build();
 
-  public static WorkplaceContactRequest validRejectEquipmentOrAdaptationClaim =
+  public static WorkplaceContactRequest invalidRejectEquipmentOrAdaptationClaim =
       WorkplaceContactRequest.builder()
           .claimNumber(validClaimNumber)
           .claimType(ClaimType.EQUIPMENT_OR_ADAPTATION)
+          .organisation("Organisation")
+          .jobTitle("boss")
+          .address(address)
+          .reason("not valid claim")
+          .build();
+
+  public static WorkplaceContactRequest invalidAcceptedAdaptationToVehicleClaim =
+      WorkplaceContactRequest.builder()
+          .claimNumber(validClaimNumber)
+          .claimType(ClaimType.ADAPTATION_TO_VEHICLE)
+          .organisation("Organisation")
+          .jobTitle("boss")
+          .address(address)
+          .build();
+
+  public static WorkplaceContactRequest invalidRejectAdaptationToVehicleClaim =
+      WorkplaceContactRequest.builder()
+          .claimNumber(validClaimNumber)
+          .claimType(ClaimType.ADAPTATION_TO_VEHICLE)
           .organisation("Organisation")
           .jobTitle("boss")
           .address(address)

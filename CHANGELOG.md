@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.15.0 - (2024-01-15)
+* Updated dependency versions
+* Update fragments
+* Adding new journey Adaptation to Vehicle functionality
+
 # 1.14.0 - (2023-10-30)
 * Updated dependency versions
 * Update distroless version
