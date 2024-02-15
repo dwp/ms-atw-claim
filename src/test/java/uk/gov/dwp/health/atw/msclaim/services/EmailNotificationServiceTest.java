@@ -9,12 +9,10 @@ import static org.mockito.Mockito.verify;
 import static uk.gov.dwp.health.atw.msclaim.testData.ContactInformationTestData.contactInformationRequestWithUploadedToDocumentBatchStatus;
 import static uk.gov.dwp.health.atw.msclaim.testData.ContactInformationTestData.submittedContactInformationRequestWithNullEmail;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.submittedEquipmentOrAdaptationRequest;
-import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.validEquipmentOrAdaptationSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForTwoMonthsRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftForTwoMonthsTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftWithNoClaimantEmail;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.dwp.health.atw.msclaim.models.exceptions.ClaimException;
-import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EmailNotificationRequest;
 import uk.gov.dwp.health.atw.msclaim.temp.service.NotificationService;
-import uk.gov.dwp.health.crypto.exception.CryptoException;
 
 @SpringBootTest(classes = EmailNotificationService.class)
 class EmailNotificationServiceTest {
@@ -62,6 +57,7 @@ class EmailNotificationServiceTest {
     assertNull(actualEmailNotificationRequest.getNotificationData().get("CONFIRMERS_FULL_NAME"));
     assertNull(actualEmailNotificationRequest.getNotificationData().get("CLAIM_NUMBER"));
   }
+
   @Test
   @DisplayName("send notification email to claimant (claim email override enabled)")
   void sendNotificationEmailClaimEmailOverride() {
@@ -196,7 +192,6 @@ class EmailNotificationServiceTest {
     assertEquals( "TW0000000" + submittedLiftForTwoMonthsTravelToWorkClaimRequest.getId(), actualEmailNotificationRequest.getNotificationData().get("CLAIM_NUMBER"));
   }
 
-
   @Test
   @DisplayName("send notification email to claimant that their claim has been rejected")
   void sendNotificationEmailToClaimantThatTheirClaimHasBeenRejected() {
@@ -255,7 +250,6 @@ class EmailNotificationServiceTest {
     assertEquals(contactInformationRequestWithUploadedToDocumentBatchStatus.getNewContactInformation().getEmailAddress(), actualEmailNotificationRequest.getNotificationDestination() );
     assertEquals(contactInformationRequestWithUploadedToDocumentBatchStatus.getNewContactInformation().getSurname(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_LAST_NAME"));
     assertEquals(contactInformationRequestWithUploadedToDocumentBatchStatus.getNewContactInformation().getForename(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_FIRST_NAME"));
-
   }
 
   @Test
@@ -267,7 +261,6 @@ class EmailNotificationServiceTest {
 
     emailNotificationService.notifyClaimantContactDetailsHaveChanged(submittedContactInformationRequestWithNullEmail);
     verify(notificationService, times(0)).sendEmail(argument.capture());
-
   }
 
   @Test
@@ -281,5 +274,4 @@ class EmailNotificationServiceTest {
 
     verify(notificationService, times(1)).sendEmail(argument.capture());
   }
-
 }

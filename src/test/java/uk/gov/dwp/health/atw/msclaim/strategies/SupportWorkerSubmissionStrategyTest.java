@@ -14,8 +14,12 @@ import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.reSub
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.resubmittedSupportWorkerClaimForOneMonthRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.resubmittedValidSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForOneMonthRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForOneMonthWithoutNameOfSupportRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForTwoMonthsRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimRequestWithNameOfSupportOnSupportWorkerClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequestWithNameOfSupportOnSupportWorkerClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequestWithoutNameOfSupport;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.resubmitedValidClaimNumber;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumberDoubleDigits;
@@ -60,12 +64,46 @@ class SupportWorkerSubmissionStrategyTest {
   }
 
   @Test
+  @DisplayName("submit Support Worker claim for one month without name of support successfully")
+  void saveClaimWithSupportWorkerForOneMonthWithoutNameOfSupportClaimType() {
+
+    ClaimRequest spyValidSupportWorkerClaim = spy(validSupportWorkerClaimRequestWithoutNameOfSupport);
+
+    when(claimService.validateAndSaveActiveClaim(any(ClaimRequest.class), anyLong())).thenReturn(submittedSupportWorkerClaimForOneMonthWithoutNameOfSupportRequest);
+
+    assertThat(supportWorkerSubmissionStrategy.submit(spyValidSupportWorkerClaim,
+        validClaimNumber), samePropertyValuesAs(claimResponseSw));
+
+    verify(spyValidSupportWorkerClaim, times(1)).setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+    verify(claimService, times(1)).handlePreviousClaim(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
   @DisplayName("submit Support Worker claim for two months successfully")
   void saveClaimWithSupportWorkerForTwoMonthClaimType() {
 
     ClaimRequest spyValidSupportWorkerClaim = spy(validSupportWorkerClaimRequest);
 
     when(claimService.validateAndSaveActiveClaim(any(ClaimRequest.class), anyLong())).thenReturn(submittedSupportWorkerClaimForTwoMonthsRequest);
+
+    assertThat(supportWorkerSubmissionStrategy.submit(spyValidSupportWorkerClaim,
+        validClaimNumberDoubleDigits), samePropertyValuesAs(claimResponseWithClaimNumber11Sw));
+
+    verify(spyValidSupportWorkerClaim, times(1)).setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+    verify(claimService, times(1)).handlePreviousClaim(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Support Worker claim where nameOfSupport is on Support worker claim")
+  void saveSubmitSupportWorkerClaimWithNameOfSupportOnSupportWorkerClaim() {
+
+    ClaimRequest spyValidSupportWorkerClaim = spy(validSupportWorkerClaimRequestWithNameOfSupportOnSupportWorkerClaim);
+
+    when(claimService.validateAndSaveActiveClaim(any(ClaimRequest.class), anyLong())).thenReturn(submittedSupportWorkerClaimRequestWithNameOfSupportOnSupportWorkerClaim);
 
     assertThat(supportWorkerSubmissionStrategy.submit(spyValidSupportWorkerClaim,
         validClaimNumberDoubleDigits), samePropertyValuesAs(claimResponseWithClaimNumber11Sw));

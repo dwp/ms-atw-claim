@@ -205,6 +205,7 @@ Submit a claim to be saved in the mongo database
   "atwNumber": "ATW1234567895",
   "claimType": "SUPPORT_WORKER",
   "previousClaimId": 1, // Optional. This field links the previous claim to the claim that is being resubmitted.
+  "nameOfSupport": "Joe Bloggs", // Optional
   "claim": {
     "0": {
       "monthYear": {
@@ -217,16 +218,14 @@ Submit a claim to be saved in the mongo database
           "timeOfSupport": {
             "hoursOfSupport": 2,
             "minutesOfSupport": 15
-          },
-          "nameOfSupport": "Joe Bloggs"// Optional
+          }
         },
         {
           "dayOfSupport": "2",
           "timeOfSupport": {
             "hoursOfSupport": 3,
             "minutesOfSupport": 0
-          },
-          "nameOfSupport": "John Smith"// Optional
+          }
         }
       ]
     },
@@ -248,8 +247,7 @@ Submit a claim to be saved in the mongo database
           "timeOfSupport": {
             "hoursOfSupport": 12,
             "minutesOfSupport": 15
-          },
-          "nameOfSupport": "John Smith"// Optional
+          }
         }
       ]
     }

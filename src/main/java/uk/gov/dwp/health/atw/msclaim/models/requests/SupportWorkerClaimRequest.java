@@ -34,5 +34,6 @@ public class SupportWorkerClaimRequest extends ClaimRequestWithWorkplaceContact 
   @NonNull
   private List<Evidence> evidence;
 
-
+  @JsonProperty(value = "nameOfSupport")
+  String nameOfSupport;
 }

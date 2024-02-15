@@ -40,11 +40,4 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
         <cve>CVE-2023-6378</cve>
         <cve>CVE-2023-6481</cve>
     </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: amazon.ion* // this is temporary until amazon.ion releases a fix.
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/software\.amazon.ion.*$</packageUrl>
-        <cve>CVE-2024-21634</cve>
-    </suppress>
 </suppressions>

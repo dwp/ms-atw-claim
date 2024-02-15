@@ -31,6 +31,16 @@ public class SupportWorkerClaim {
   @JsonProperty(value = "hoursOfSupport")
   Double hoursOfSupport;
 
+  /**
+   * This field should no longer be used. However, support is still required to account
+   * for cases where a support worker claim was created before the nameOfSupport field was
+   * moved to the SupportWorker object. This is due to changes leading to nameOfSupport only being
+   * input once per claim. Support for the nameOfSupport field on SupportWorkerClaim will be
+   * removed in the future.
+   *
+   * @Deprecated
+   */
+  @Deprecated(since = "1.15.0")
   @JsonProperty(value = "nameOfSupport")
   String nameOfSupport;
 }

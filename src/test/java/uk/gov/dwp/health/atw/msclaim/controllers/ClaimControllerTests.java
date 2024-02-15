@@ -320,7 +320,7 @@ class ClaimControllerTests {
   }
 
   @Test
-  @DisplayName("/reject updated claim record successfully")
+  @DisplayName("/reject updated claim record successfully -SW")
   void rejectWorkplaceContactSuccessful() throws Exception {
     when(claimService.counterSignHandler(eq(CounterSignType.REJECT),
         any(WorkplaceContactRequest.class)))

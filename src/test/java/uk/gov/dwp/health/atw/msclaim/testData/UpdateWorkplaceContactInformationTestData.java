@@ -1,7 +1,7 @@
 package uk.gov.dwp.health.atw.msclaim.testData;
 
 import static java.util.Collections.singletonMap;
-import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.supportWorkerClaimForOneMonth;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.supportWorkerClaimForOneMonthWithNameOfSupport;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.ATW_NUMBER;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.COST;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.DECLARATION_VERSION;
@@ -60,7 +60,7 @@ public class UpdateWorkplaceContactInformationTestData {
           .evidence(evidences)
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
-          .claim(singletonMap("0", supportWorkerClaimForOneMonth))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(updatedCounterSign)
