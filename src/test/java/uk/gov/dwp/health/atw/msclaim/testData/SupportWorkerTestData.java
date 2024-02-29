@@ -62,15 +62,15 @@ public class SupportWorkerTestData {
       .build();
 
   private static final SupportWorkerClaim supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport = SupportWorkerClaim.builder()
-        .dayOfSupport(1)
-        .build();
+      .dayOfSupport(1)
+      .build();
 
   private static final SupportWorkerClaim supportWorkerClaimWithTimeOfSupport3Hours30Mins = SupportWorkerClaim.builder()
-        .dayOfSupport(2)
-        .timeOfSupport(timeOfSupport3Hours30Mins)
-        .build();
+      .dayOfSupport(2)
+      .timeOfSupport(timeOfSupport3Hours30Mins)
+      .build();
 
-  public static final SupportWorker supportWorkerClaimForOneMonthWithNameOfSupport = SupportWorker.builder()
+  public static final SupportWorker supportWorkerClaimForOneMonthWithTwoDaysOfSupport = SupportWorker.builder()
       .monthYear(monthYearOfSupport)
       .claim(asList(supportWorkerClaim, supportWorkerClaimWithTimeOfSupport3Hours30Mins))
       .build();
@@ -86,13 +86,13 @@ public class SupportWorkerTestData {
           .evidence(evidences)
           .payee(newPayee)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
           .build();
 
-  public static final SupportWorker supportWorkerClaimForOneMonthWithoutNameOfSupport = SupportWorker.builder()
+  public static final SupportWorker supportWorkerClaimForOneMonthWithOneDayOfSupport = SupportWorker.builder()
       .monthYear(monthYearOfSupport)
       .claim(singletonList(supportWorkerClaim))
       .build();
@@ -107,7 +107,7 @@ public class SupportWorkerTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithoutNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithOneDayOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -125,16 +125,16 @@ public class SupportWorkerTestData {
           .evidence(evidences)
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithoutNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
           .build();
 
   private static final SupportWorker supportWorkerWithoutHoursOfSupportAndTimeOfSupport = SupportWorker.builder()
-        .monthYear(monthYearOfSupport)
-        .claim(asList(supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport, supportWorkerClaimWithTimeOfSupport3Hours30Mins))
-        .build();
+      .monthYear(monthYearOfSupport)
+      .claim(asList(supportWorkerClaimWithoutHoursOfSupportAndTimeOfSupport, supportWorkerClaimWithTimeOfSupport3Hours30Mins))
+      .build();
 
   public static final SupportWorkerClaimRequest invalidSupportWorkerClaimRequestWithoutHoursOfSupportAndTimeOfSupport =
       SupportWorkerClaimRequest.builder()
@@ -146,6 +146,7 @@ public class SupportWorkerTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
+          .nameOfSupport("Person 3")
           .claim(singletonMap("0", supportWorkerWithoutHoursOfSupportAndTimeOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
@@ -163,7 +164,7 @@ public class SupportWorkerTestData {
           .evidence(evidences)
           .payee(newPayee)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -183,7 +184,7 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -203,7 +204,7 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.REPLACED_BY_NEW_CLAIM)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -223,7 +224,7 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -242,7 +243,8 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .nameOfSupport("Person 3")
-          .claim(Map.of("0", supportWorkerClaimForOneMonthWithNameOfSupport, "1", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(Map.of("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport, "1",
+              supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -259,7 +261,7 @@ public class SupportWorkerTestData {
           .evidence(evidences)
           .payee(newPayee)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(selfEmployedWorkplaceContact)
@@ -275,7 +277,7 @@ public class SupportWorkerTestData {
           .evidence(evidences)
           .payee(newPayee)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -294,7 +296,7 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)
@@ -313,7 +315,7 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_DRS_UPLOAD)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(acceptedWorkplaceContactResponse)
@@ -332,13 +334,13 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.COUNTER_SIGN_REJECTED)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(rejectedWorkplaceContactResponse)
           .build();
 
-  public static final SupportWorkerClaimRequest invalidClaimTypeSupportWorkerClaimRequest =
+  public static final SupportWorkerClaimRequest invalidClaimTypeSupportWorkerClaimWithEAClaimTypeRequest =
       SupportWorkerClaimRequest.builder()
           .id(validClaimNumber)
           .nino(NINO)
@@ -351,7 +353,26 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.COUNTER_SIGN_REJECTED)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(rejectedWorkplaceContactResponse)
+          .build();
+
+  public static final SupportWorkerClaimRequest invalidClaimTypeSupportWorkerClaimWithAVClaimTypeRequest =
+      SupportWorkerClaimRequest.builder()
+          .id(validClaimNumber)
+          .nino(NINO)
+          .claimType(ClaimType.ADAPTATION_TO_VEHICLE)
+          .cost(COST)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .evidence(evidences)
+          .payee(newPayee)
+          .claimStatus(ClaimStatus.COUNTER_SIGN_REJECTED)
+          .nameOfSupport("Person 3")
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(rejectedWorkplaceContactResponse)
@@ -371,7 +392,7 @@ public class SupportWorkerTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .nameOfSupport("Person 3")
-          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithNameOfSupport))
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(emailAndFullNameWorkplaceContact)

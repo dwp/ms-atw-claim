@@ -97,6 +97,24 @@ public class TravelToWorkTestData {
           .workplaceContact(acceptWorkplaceContact)
           .build();
 
+  public static final TravelToWorkClaimRequest invalidClaimTypeForTravelToWorkWithAVClaimTypeRequest =
+      TravelToWorkClaimRequest.builder()
+          .id(validTravelToWorkClaim.getId())
+          .nino(validTravelToWorkClaim.getNino())
+          .claimType(ClaimType.ADAPTATION_TO_VEHICLE)
+          .cost(validTravelToWorkClaim.getCost())
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .payee(validTravelToWorkClaim.getPayee())
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .travelDetails(travelDetailsForLiftWithMiles)
+          .claim(singletonMap("0", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(acceptWorkplaceContact)
+          .build();
+
   public static final TravelToWorkClaimRequest submittedLiftTravelToWorkClaimRequest =
       TravelToWorkClaimRequest.builder()
           .id(validTravelToWorkClaim.getId())

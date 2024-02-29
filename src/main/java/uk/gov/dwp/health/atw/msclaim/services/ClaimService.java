@@ -194,6 +194,11 @@ public class ClaimService {
           + CANNOT_BE_WORKPLACE_CONTACT);
     }
 
+    if (claimRequest.getClaimType() == ADAPTATION_TO_VEHICLE) {
+      throw new WrongClaimOrBadRequestException(ADAPTATION_TO_VEHICLE
+          + CANNOT_BE_WORKPLACE_CONTACT);
+    }
+
     if (claimRequest.getClaimStatus() != AWAITING_COUNTER_SIGN) {
       throw new ClaimHasWrongStatusException("Claim with status "
           + claimRequest.getClaimStatus()

@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.17.0 - (2024-02-28)
+* Update fragments
+* Added additional Adaptation to Vehicle validation
+* Updates to Support Worker and Travel to Work test data
+* Dependancy Suppression
+
 # 1.16.0 - (2024-02-13)
 * Updated dependency versions
 * Update fragments

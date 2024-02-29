@@ -17,14 +17,13 @@ import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.AWAITING_AG
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.DRS_ERROR;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.UPLOADED_TO_DOCUMENT_BATCH;
 import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedAdaptationToVehicleRequest;
-import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedAdaptationToVehicleTwoClaimsRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.submittedInvalidAVdRequestWithPreviousId;
 import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleSubmitRequest;
-import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleTwoClaimsSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.submittedEquipmentOrAdaptationRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.submittedInvalidEAdRequestWithPreviousId;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.existingSupportWorkerClaimRequest;
-import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.invalidClaimTypeSupportWorkerClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.invalidClaimTypeSupportWorkerClaimWithAVClaimTypeRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.invalidClaimTypeSupportWorkerClaimWithEAClaimTypeRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.invalidRejectWorkplaceContactWithEmptyReasonDescriptionForSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.resubmittedSavedValidSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedAcceptedSupportWorkerClaimRequest;
@@ -55,6 +54,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invali
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidAcceptWorkplaceContactWithoutDeclarationVersionForTravelToWorkRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidClaimForTravelToWorkWithPreviousIdRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidClaimTypeForTravelToWorkRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidClaimTypeForTravelToWorkWithAVClaimTypeRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invalidSelfEmployedAwaitingCounterSignTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedAcceptedTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedAcceptedTravelToWorkClaimRequestWithTwoClaims;
@@ -252,6 +252,22 @@ class ClaimServiceTests {
   }
 
   @Test
+  @DisplayName("accept fail - workplace contact has Adaptation to Vehicle claim type for Travel to Work Workplace Contact Request")
+  void acceptWorkplaceContactWithAdaptationToVehicleClaimType() {
+    when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
+        .thenReturn(invalidClaimTypeForTravelToWorkWithAVClaimTypeRequest);
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.counterSignHandler(CounterSignType.ACCEPT,
+            validAcceptedTravelToWorkClaim));
+
+    assertEquals("ADAPTATION_TO_VEHICLE cannot be a workplace contact",
+        thrown.getErrorMessage());
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenApproved(
+        any(ClaimRequest.class));
+  }
+
+  @Test
   @DisplayName("accept fail - workplace contact with a reason description")
   void acceptWorkplaceContactWithReasonDescription() {
     when(travelToWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
@@ -398,11 +414,26 @@ class ClaimServiceTests {
   @DisplayName("reject fail - workplace contact has Equipment And Adaptations claim type")
   void rejectWorkplaceContactWithEquipAndAdaptationsClaimType() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
-        .thenReturn(invalidClaimTypeSupportWorkerClaimRequest);
+        .thenReturn(invalidClaimTypeSupportWorkerClaimWithEAClaimTypeRequest);
     WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
         () -> claimService.counterSignHandler(CounterSignType.REJECT,
             validRejectedSupportWorkerClaim));
     assertEquals("EQUIPMENT_OR_ADAPTATION cannot be a workplace contact",
+        thrown.getErrorMessage());
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenRejected(
+        any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("reject fail - workplace contact has Adaptation to Vehicle claim type")
+  void rejectWorkplaceContactWithAdaptationToVehicleClaimType() {
+    when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
+        .thenReturn(invalidClaimTypeSupportWorkerClaimWithAVClaimTypeRequest);
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.counterSignHandler(CounterSignType.REJECT,
+            validRejectedSupportWorkerClaim));
+    assertEquals("ADAPTATION_TO_VEHICLE cannot be a workplace contact",
         thrown.getErrorMessage());
     verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
     verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenRejected(

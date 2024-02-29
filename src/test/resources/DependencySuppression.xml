@@ -9,6 +9,7 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
 ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework.*$</packageUrl>
         <cve>CVE-2016-1000027</cve>
+        <cve>CVE-2024-22243</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
