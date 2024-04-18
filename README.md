@@ -438,6 +438,139 @@ Submit a claim to be saved in the mongo database
 }
 ```
 
+### POST /submit for Travel In Work
+
+Submit a claim to be saved in the mongo database
+
+#### Body (all fields are required)
+```json5
+{
+    "nino": "CS700100A",
+    "atwNumber": "ATW1234567",
+    "declarationVersion": 2.1,
+    "claimType": "TRAVEL_IN_WORK",
+    "previousClaimId": 3,// Optional. This field links the previous claim to the claim that is being resubmitted for an employed employmentStatus
+    "cost": 2211,
+    "hasContributions": true,
+    "totalMileage": 2,
+    "claim": {
+        "0": {
+            "monthYear": {
+                "mm": "04",
+                "yyyy": "2020"
+            },
+            "claim": [
+                {
+                    "dayOfTravel": "12",
+                    "startPostcode": "xx11 1xx",
+                    "endPostcode": "xx11 2xx",
+                    "costOfTravel": "13" // All fields are required. No optional fields as this is a TIW specific field
+                },
+                {
+                    "dayOfTravel": "13",
+                    "startPostcode": "xx11 1xx",
+                    "endPostcode": "xx11 2xx",
+                    "costOfTravel": "14" 
+                },
+                {
+                    "dayOfTravel": "14",
+                    "startPostcode": "xx11 1xx",
+                    "endPostcode": "xx11 2xx",
+                    "costOfTravel": "15" 
+                }
+            ]
+        },
+        "1": {
+            "monthYear": {
+                "mm": "05",
+                "yyyy": "2020"
+            },
+            "claim": [
+                {
+                    "dayOfTravel": "13",
+                    "startPostcode": "xx11 1xx",
+                    "endPostcode": "xx11 2xx",
+                    "costOfTravel": "14" 
+                },
+                {
+                    "dayOfTravel": "14",
+                    "startPostcode": "xx11 1xx",
+                    "endPostcode": "xx11 2xx",
+                    "costOfTravel": "15" 
+                }
+            ]
+        }
+    },
+    "evidence": [// Same as SW, TW, AV and EA
+      {
+        "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
+        "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
+      }
+    ],
+    "payee": { // Same as SW, TW, AV and EA
+        "newPayee": true,
+        "details": { // details must always be present
+            "fullName": "INeed Paying",
+            "emailAddress": "payment@now.com"// Optional if newPayee is set to false
+        },
+        "address": {// if newPayee is set to false, address is not required
+            "address1": "THE COTTAGE",
+            "address2": "ST. MARYS ISLAND", // Optional
+            "address3": "WHITLEY BAY",
+            "address4": "WHITLEY BAY", // Optional
+            "postcode": "NE26 4RS"
+        },
+        "bankDetails": {// if newPayee is set to false, bankDetails is not required
+            "accountHolderName": "Ineed Paying",
+            "sortCode": "000004",
+            "accountNumber": "12345677",
+            "rollNumber": "12345677"
+        }
+    },
+    "workplaceContact": { //This block is different for TIW
+      "employmentStatus": "employed", // Shown on TW and TIW. Values: employed or selfEmployed
+      "fullName": "Count Signer", // Only shown when employmentStatus is employed 
+      "emailAddress": "Count@sign.com" // Only shown when employmentStatus is employed
+    },
+    "claimant": {
+        "forename": "Odin",
+        "surname": "Surtsson",
+        "dateOfBirth": "1930-11-22",
+        "emailAddress": "Odin.Surtsson@gmail.com",
+        "homeNumber": "01233665544",
+        "mobileNumber": "07700900630",
+        "company": "Company 1",
+        "address": {
+            "address1": "1 The Street",
+            "address2": "Village Name",
+            "address3": "Town",
+            "address4": "County",
+            "postcode": "NE26 4RS"
+        }
+    },
+    "journeyContext": { // This is the data as it is saved in Casa
+        "data": {
+            "equipment-cost": {
+                "cost": 123.2
+            }
+        }
+    }
+}
+
+```
+
+#### Response
+
+201 - Created
+
+```json5
+{
+  "claimReference": "TIW15",
+  "claimNumber": 15,
+  "claimType": "TRAVEL_IN_WORK"
+}
+```
+
 ### PUT /accept
 
 Submit an update to a claim in the mongo database

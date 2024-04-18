@@ -10,6 +10,7 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
         <packageUrl regex="true">^pkg:maven/org\.springframework.*$</packageUrl>
         <cve>CVE-2016-1000027</cve>
         <cve>CVE-2024-22243</cve>
+        <cve>CVE-2024-22262</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -25,6 +26,7 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
         <packageUrl regex="true">^pkg:maven/org\.bouncycastle.*$</packageUrl>
         <cve>CVE-2022-45146</cve>
         <cve>CVE-2023-33202</cve>
+        <cve>CVE-2024-29857</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -32,6 +34,14 @@ file name: spring-web* //A potential threat - spring won't fix this as some inte
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/com\.fasterxml.*$</packageUrl>
         <cve>CVE-2023-35116</cve>
+        <cve>CVE-2024-23080</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: joda-time* // this is temporary until joda-time releases a fix.
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/joda-time/joda-time.*$</packageUrl>
+        <cve>CVE-2024-23080</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[

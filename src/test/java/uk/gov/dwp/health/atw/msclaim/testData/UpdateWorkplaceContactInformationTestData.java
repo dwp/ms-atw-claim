@@ -11,6 +11,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.claimant;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.evidences;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelDetailsForLiftWithMiles;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelInWorkClaimForOneMonth;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelToWorkClaimForOneMonth;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
 
@@ -20,6 +21,7 @@ import uk.gov.dwp.health.atw.msclaim.models.WorkplaceContact;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
+import uk.gov.dwp.health.atw.msclaim.models.requests.TravelInWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.TravelToWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.UpdateWorkplaceContactRequest;
 
@@ -44,6 +46,22 @@ public class UpdateWorkplaceContactInformationTestData {
       UpdateWorkplaceContactRequest.builder()
           .nino(NINO)
           .claimReference("SW000" + validClaimNumber)
+          .workplaceContact(updatedCounterSign)
+          .build();
+
+  public static UpdateWorkplaceContactRequest
+      updateTravelToWorkWorkplaceContactInformationRequest =
+      UpdateWorkplaceContactRequest.builder()
+          .nino(NINO)
+          .claimReference("TW000" + validClaimNumber)
+          .workplaceContact(updatedCounterSign)
+          .build();
+
+  public static UpdateWorkplaceContactRequest
+      updateTravelInWorkWorkplaceContactInformationRequest =
+      UpdateWorkplaceContactRequest.builder()
+          .nino(NINO)
+          .claimReference("TIW000" + validClaimNumber)
           .workplaceContact(updatedCounterSign)
           .build();
 
@@ -79,6 +97,23 @@ public class UpdateWorkplaceContactInformationTestData {
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .travelDetails(travelDetailsForLiftWithMiles)
           .claim(Map.of("0", travelToWorkClaimForOneMonth, "1", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(updatedTravelToWorkEmployedWorkplaceContact)
+          .build();
+
+  public static TravelInWorkClaimRequest updateWorkplaceContactForTravelInWorkClaimRequest =
+      TravelInWorkClaimRequest.builder()
+          .id(validClaimNumber)
+          .nino(NINO)
+          .claimType(ClaimType.TRAVEL_IN_WORK)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .cost(COST)
+          .payee(newPayee)
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .claim(Map.of("0", travelInWorkClaimForOneMonth, "1", travelInWorkClaimForOneMonth))
           .declarationVersion(DECLARATION_VERSION)
           .journeyContext(Collections.emptyMap())
           .workplaceContact(updatedTravelToWorkEmployedWorkplaceContact)

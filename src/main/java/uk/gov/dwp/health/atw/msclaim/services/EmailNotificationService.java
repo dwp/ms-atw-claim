@@ -1,6 +1,7 @@
 package uk.gov.dwp.health.atw.msclaim.services;
 
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.SUPPORT_WORKER;
+import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.TRAVEL_IN_WORK;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.TRAVEL_TO_WORK;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,7 @@ import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ContactInformationRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EmailNotificationRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
+import uk.gov.dwp.health.atw.msclaim.models.requests.TravelInWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.TravelToWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.temp.service.NotificationService;
 import uk.gov.dwp.health.crypto.exception.CryptoException;
@@ -226,6 +228,14 @@ public class EmailNotificationService {
             getClaimNumber(SUPPORT_WORKER.label, swClaimRequest.getId()));
         workplaceContactEmail = swClaimRequest.getWorkplaceContact().getEmailAddress();
         break;
+      case TRAVEL_IN_WORK:
+        TravelInWorkClaimRequest tiwClaimRequest = (TravelInWorkClaimRequest) claimRequest;
+        notificationData.put(CONFIRMERS_FULL_NAME,
+            tiwClaimRequest.getWorkplaceContact().getFullName());
+        notificationData.put(CLAIM_NUMBER,
+            getClaimNumber(TRAVEL_IN_WORK.label, tiwClaimRequest.getId()));
+        workplaceContactEmail = tiwClaimRequest.getWorkplaceContact().getEmailAddress();
+        break;
       default:
         throw new IllegalArgumentException(
             "Claim type not supported " + claimRequest.getClaimType());
@@ -236,6 +246,7 @@ public class EmailNotificationService {
 
   private String getClaimNumber(String claimTypeLabel, long id) {
 
-    return claimTypeLabel + "0".repeat(Math.max(0, 8 - Long.toString(id).length())) + id;
+    return claimTypeLabel + "0".repeat(
+        Math.max(0, 10 - (claimTypeLabel.length() + Long.toString(id).length()))) + id;
   }
 }

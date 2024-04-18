@@ -1,5 +1,12 @@
 # Changelog
 
+# 1.18.0 - (2024-04-17)
+* Update fragments
+* Added Travel in Work functionality
+* Added Travel in Work tests
+* Added Travel in Work validation
+* Dependancy Suppressions
+
 # 1.17.0 - (2024-02-28)
 * Update fragments
 * Added additional Adaptation to Vehicle validation

@@ -47,6 +47,14 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenc
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceNinoForTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validRequestRejectedClaimsForNino;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.existingTravelInWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.invalidClaimForSelfEmployedTravelInWorkWithPreviousIdRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.invalidSelfEmployedAwaitingCounterSignTravelInWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedAcceptedTravelInWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedRejectedTravelInWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedForTwoMonthsTravelInWorkEmployedClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedTravelInWorkSelfEmployedClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validForTwoMonthsTravelInWorkEmployedSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.awaitingAgentApprovalTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.drsErrorTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.existingTravelToWorkClaimRequest;
@@ -64,7 +72,10 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submit
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedTaxiTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.uploadedToDocumentBatchTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateSupportWorkerWorkplaceContactInformationRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateTravelInWorkWorkplaceContactInformationRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateTravelToWorkWorkplaceContactInformationRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateWorkplaceContactForSupportWorkerClaimOneMonthRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateWorkplaceContactForTravelInWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.UpdateWorkplaceContactInformationTestData.updateWorkplaceContactForTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.inValidAcceptedTravelToWorkClaimMissingDeclarationVersion;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.inValidRejectedSupportWorkerClaimHasDeclarationVersion;
@@ -73,8 +84,10 @@ import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.in
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedSupportWorkerClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedTravelInWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedSupportWorkerClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedTravelInWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.utils.TestUtils.asJsonString;
 
@@ -97,6 +110,7 @@ import uk.gov.dwp.health.atw.msclaim.models.requests.AdaptationToVehicleClaimReq
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EquipmentOrAdaptationClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
+import uk.gov.dwp.health.atw.msclaim.models.requests.TravelInWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.TravelToWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.repositories.ClaimRepository;
 import uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData;
@@ -118,6 +132,8 @@ class ClaimServiceTests {
   private ClaimRepository<EquipmentOrAdaptationClaimRequest> equipmentOrAdaptationRepository;
   @MockBean
   private ClaimRepository<AdaptationToVehicleClaimRequest> adaptationToVehicleRepository;
+  @MockBean
+  private ClaimRepository<TravelInWorkClaimRequest> travelInWorkClaimRepository;
   @MockBean
   private ClaimPublisher claimPublisher;
   @MockBean
@@ -161,6 +177,28 @@ class ClaimServiceTests {
             validAcceptedTravelToWorkClaim)));
 
     verify(spyTravelToWorkClaimRequest, times(1))
+        .setClaimStatus(ClaimStatus.AWAITING_DRS_UPLOAD);
+    verify(claimPublisher, times(1)).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, times(1)).notifyClaimantTheirClaimHasBeenApproved(
+        any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("accept workplace contact travel in work successful - TIW")
+  void acceptWorkplaceContactTravelInWorkSuccessful() throws Exception {
+    TravelInWorkClaimRequest spyTravelInWorkClaimRequest =
+        spy(existingTravelInWorkClaimRequest);
+
+    when(travelInWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
+        .thenReturn(spyTravelInWorkClaimRequest);
+    when(claimRepository.save(any(TravelInWorkClaimRequest.class)))
+        .thenReturn(submittedAcceptedTravelInWorkClaimRequest);
+
+    assertEquals(asJsonString(submittedAcceptedTravelInWorkClaimRequest),
+        asJsonString(claimService.counterSignHandler(CounterSignType.ACCEPT,
+            validAcceptedTravelInWorkClaim)));
+
+    verify(spyTravelInWorkClaimRequest, times(1))
         .setClaimStatus(ClaimStatus.AWAITING_DRS_UPLOAD);
     verify(claimPublisher, times(1)).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
     verify(emailNotificationService, times(1)).notifyClaimantTheirClaimHasBeenApproved(
@@ -323,6 +361,28 @@ class ClaimServiceTests {
   }
 
   @Test
+  @DisplayName("reject workplace contact successful - TIW")
+  void rejectWorkplaceContactTravelInWorkSuccessful() throws ClaimException {
+    TravelInWorkClaimRequest spyTravelInWorkClaimRequest =
+        spy(existingTravelInWorkClaimRequest);
+
+    when(travelInWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
+        .thenReturn(spyTravelInWorkClaimRequest);
+    when(claimRepository.save(any(TravelInWorkClaimRequest.class)))
+        .thenReturn(submittedRejectedTravelInWorkClaimRequest);
+
+    assertEquals(asJsonString(submittedRejectedTravelInWorkClaimRequest),
+        asJsonString(claimService.counterSignHandler(CounterSignType.REJECT,
+            validRejectedTravelInWorkClaim)));
+
+    verify(spyTravelInWorkClaimRequest, times(1))
+        .setClaimStatus(ClaimStatus.COUNTER_SIGN_REJECTED);
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, times(1)).notifyClaimantTheirClaimHasBeenRejected(
+        any(ClaimRequest.class));
+  }
+
+  @Test
   @DisplayName("reject workplace contact successful - SW")
   void rejectWorkplaceContactSupportWorkerSuccessful() throws ClaimException {
     SupportWorkerClaimRequest spySupportWorkerClaimRequest =
@@ -457,7 +517,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("reject fail - workplace contact with empty reason description")
+  @DisplayName("reject fail - workplace contact with declaration version")
   void rejectWorkplaceContactWithDeclarationVersion() {
     when(supportWorkClaimRepository.findClaimByIdAndClaimType(any(Long.class), any(String.class)))
         .thenReturn(
@@ -610,7 +670,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("Find claims by Nino and Type")
+  @DisplayName("Find claims by Nino and Type - EA")
   void findClaimsByNinoAndType() {
     when(claimRepository.findClaimsByNinoAndClaimType(any(String.class), any(String.class)))
         .thenReturn(List.of(submittedEquipmentOrAdaptationRequest));
@@ -619,7 +679,7 @@ class ClaimServiceTests {
   }
 
   @Test
-  @DisplayName("Find claims by Nino and Type -AV")
+  @DisplayName("Find claims by Nino and Type - AV")
   void findClaimsByNinoAndTypeAv() {
     when(claimRepository.findClaimsByNinoAndClaimType(any(String.class), any(String.class)))
         .thenReturn(List.of(submittedAdaptationToVehicleRequest));
@@ -782,7 +842,7 @@ class ClaimServiceTests {
 
   @Test
   @DisplayName("update workplace details for travel to work successful")
-  void updateWorkplaceDetailsForEmployedTravelWorkerSuccessful() throws ClaimException {
+  void updateWorkplaceDetailsForEmployedTravelToWorkerSuccessful() throws ClaimException {
     when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
         .thenReturn(submittedLiftForTwoMonthsTravelToWorkClaimRequest);
 
@@ -790,7 +850,20 @@ class ClaimServiceTests {
         .thenReturn(updateWorkplaceContactForTravelToWorkClaimRequest);
 
     assertEquals(updateWorkplaceContactForTravelToWorkClaimRequest,
-        claimService.updateWorkplaceDetails(updateSupportWorkerWorkplaceContactInformationRequest));
+        claimService.updateWorkplaceDetails(updateTravelToWorkWorkplaceContactInformationRequest));
+  }
+
+  @Test
+  @DisplayName("update workplace details for travel in work successful")
+  void updateWorkplaceDetailsForEmployedTravelInWorkerSuccessful() throws ClaimException {
+    when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
+        .thenReturn(submittedForTwoMonthsTravelInWorkEmployedClaimRequest);
+
+    when(claimRepository.save(any(TravelInWorkClaimRequest.class)))
+        .thenReturn(updateWorkplaceContactForTravelInWorkClaimRequest);
+
+    assertEquals(updateWorkplaceContactForTravelInWorkClaimRequest,
+        claimService.updateWorkplaceDetails(updateTravelInWorkWorkplaceContactInformationRequest));
   }
 
   @Test
@@ -818,6 +891,21 @@ class ClaimServiceTests {
         assertThrows(ClaimCannotBeCounterSignedException.class,
             () -> claimService.updateWorkplaceDetails(
                 updateSupportWorkerWorkplaceContactInformationRequest));
+
+    assertEquals("Cannot be updated as it does not have the status AWAITING_COUNTER_SIGN",
+        thrown.getErrorMessage());
+  }
+
+  @Test
+  @DisplayName("Throw exception when travel in worker is not awaiting counter sign")
+  void updateWorkplaceDetailsWhereTravelInWorkIsNotAwaitingCounterSignThrowsException() {
+    when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
+        .thenReturn(submittedTravelInWorkSelfEmployedClaimRequest);
+
+    ClaimCannotBeCounterSignedException thrown =
+        assertThrows(ClaimCannotBeCounterSignedException.class,
+            () -> claimService.updateWorkplaceDetails(
+                updateTravelInWorkWorkplaceContactInformationRequest));
 
     assertEquals("Cannot be updated as it does not have the status AWAITING_COUNTER_SIGN",
         thrown.getErrorMessage());
@@ -864,12 +952,25 @@ class ClaimServiceTests {
 
   @Test
   @DisplayName("Throw exception when travel to work is self employed")
-  void updateWorkplaceDetailsForSelfEmployedTravelWorkerThrowsException() {
+  void updateWorkplaceDetailsForSelfEmployedTravelToWorkerThrowsException() {
     when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
         .thenReturn(invalidSelfEmployedAwaitingCounterSignTravelToWorkClaimRequest);
     WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
         () -> claimService.updateWorkplaceDetails(
-            updateSupportWorkerWorkplaceContactInformationRequest));
+            updateTravelToWorkWorkplaceContactInformationRequest));
+
+    assertEquals("Cannot update work place details for someone self-employed",
+        thrown.getErrorMessage());
+  }
+
+  @Test
+  @DisplayName("Throw exception when travel in work is self employed")
+  void updateWorkplaceDetailsForSelfEmployedTravelInWorkerThrowsException() {
+    when(claimRepository.findClaimByIdAndClaimTypeAndNino(anyLong(), anyString(), anyString()))
+        .thenReturn(invalidSelfEmployedAwaitingCounterSignTravelInWorkClaimRequest);
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.updateWorkplaceDetails(
+            updateTravelInWorkWorkplaceContactInformationRequest));
 
     assertEquals("Cannot update work place details for someone self-employed",
         thrown.getErrorMessage());
@@ -947,7 +1048,7 @@ class ClaimServiceTests {
 
   @Test
   @DisplayName("reject new TW - Self Employed claim when previousClaimId is set")
-  void rejectTWEmployedClaimWithPreviousClaimID() {
+  void rejectTWSelfEmployedClaimWithPreviousClaimID() {
 
     WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
         () -> claimService.validateAndSaveActiveClaim(
@@ -956,6 +1057,23 @@ class ClaimServiceTests {
 
     assertEquals(
         "TRAVEL_TO_WORK with employment status Self Employed cannot recreate previous claim",
+        thrown.getErrorMessage());
+    verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
+    verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenRejected(
+        any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("reject new TIW - Self Employed claim when previousClaimId is set")
+  void rejectTiWSelfEmployedClaimWithPreviousClaimID() {
+
+    WrongClaimOrBadRequestException thrown = assertThrows(WrongClaimOrBadRequestException.class,
+        () -> claimService.validateAndSaveActiveClaim(
+            invalidClaimForSelfEmployedTravelInWorkWithPreviousIdRequest,
+            invalidClaimForSelfEmployedTravelInWorkWithPreviousIdRequest.getId()));
+
+    assertEquals(
+        "TRAVEL_IN_WORK with employment status Self Employed cannot recreate previous claim",
         thrown.getErrorMessage());
     verify(claimPublisher, never()).publishToClaimBundler(any(SubmitToClaimBundlerEvent.class));
     verify(emailNotificationService, never()).notifyClaimantTheirClaimHasBeenRejected(
@@ -999,6 +1117,17 @@ class ClaimServiceTests {
 
     assertThat(claimService.validateAndSaveActiveClaim(validAdaptationToVehicleSubmitRequest,
         validClaimNumber), samePropertyValuesAs(submittedAdaptationToVehicleRequest));
+  }
+
+  @Test
+  @DisplayName("validate and save active claim - TIW")
+  void validateAndSaveActiveSelfEmployedTravelInWorkClaimSuccessful() {
+
+    when(claimRepository.save(any()))
+        .thenReturn(submittedForTwoMonthsTravelInWorkEmployedClaimRequest);
+
+    assertThat(claimService.validateAndSaveActiveClaim(validForTwoMonthsTravelInWorkEmployedSubmitRequest,
+        validClaimNumber), samePropertyValuesAs(submittedForTwoMonthsTravelInWorkEmployedClaimRequest));
   }
 }
 

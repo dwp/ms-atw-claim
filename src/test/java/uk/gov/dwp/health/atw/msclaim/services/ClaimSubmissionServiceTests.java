@@ -14,8 +14,10 @@ import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.valid
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.adaptationToVehicleClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.equipmentOrAdaptationsClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.supportWorkerClaimResponse;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelInWorkClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelToWorkClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkEmployedSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftTravelToWorkSubmitRequest;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +30,7 @@ import uk.gov.dwp.health.atw.msclaim.models.responses.ClaimResponse;
 import uk.gov.dwp.health.atw.msclaim.strategies.AdaptationToVehicleSubmissionStrategy;
 import uk.gov.dwp.health.atw.msclaim.strategies.EquipmentOrAdaptationsSubmissionStrategy;
 import uk.gov.dwp.health.atw.msclaim.strategies.SupportWorkerSubmissionStrategy;
+import uk.gov.dwp.health.atw.msclaim.strategies.TravelInWorkSubmissionStrategy;
 import uk.gov.dwp.health.atw.msclaim.strategies.TravelToWorkSubmissionStrategy;
 
 @SpringBootTest(classes = ClaimSubmissionService.class)
@@ -36,6 +39,7 @@ class ClaimSubmissionServiceTests {
   private SupportWorkerSubmissionStrategy supportWorkerSubmissionStrategy;
   private TravelToWorkSubmissionStrategy travelToWorkSubmissionStrategy;
   private AdaptationToVehicleSubmissionStrategy adaptationToVehicleSubmissionStrategy;
+  private TravelInWorkSubmissionStrategy travelInWorkSubmissionStrategy;
 
   ClaimSubmissionService claimSubmissionService;
 
@@ -62,8 +66,14 @@ class ClaimSubmissionServiceTests {
             any(long.class))).thenReturn(adaptationToVehicleClaimResponse);
     when(adaptationToVehicleSubmissionStrategy.getSupportedClaimType()).thenReturn(ClaimType.ADAPTATION_TO_VEHICLE);
 
+    travelInWorkSubmissionStrategy = mock(TravelInWorkSubmissionStrategy.class);
+    when(travelInWorkSubmissionStrategy.submit(any(ClaimRequest.class),
+        any(long.class))).thenReturn(travelInWorkClaimResponse);
+    when(travelInWorkSubmissionStrategy.getSupportedClaimType()).thenReturn(ClaimType.TRAVEL_IN_WORK);
+
     claimSubmissionService = new ClaimSubmissionService(asList(equipmentOrAdaptationsSubmissionStrategy,
-            supportWorkerSubmissionStrategy, travelToWorkSubmissionStrategy, adaptationToVehicleSubmissionStrategy));
+            supportWorkerSubmissionStrategy, travelToWorkSubmissionStrategy,
+            adaptationToVehicleSubmissionStrategy, travelInWorkSubmissionStrategy));
   }
 
   @Test
@@ -84,6 +94,10 @@ class ClaimSubmissionServiceTests {
             any(long.class));
     verify(supportWorkerSubmissionStrategy, never()).submit(any(ClaimRequest.class),
             any(long.class));
+    verify(adaptationToVehicleSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelInWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
   }
 
   @Test
@@ -104,6 +118,10 @@ class ClaimSubmissionServiceTests {
             any(long.class));
     verify(supportWorkerSubmissionStrategy, times(1)).submit(any(ClaimRequest.class),
             any(long.class));
+    verify(adaptationToVehicleSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelInWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
   }
 
   @Test
@@ -124,6 +142,10 @@ class ClaimSubmissionServiceTests {
             any(long.class));
     verify(supportWorkerSubmissionStrategy, never()).submit(any(ClaimRequest.class),
             any(long.class));
+    verify(adaptationToVehicleSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelInWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
   }
 
   @Test
@@ -138,13 +160,39 @@ class ClaimSubmissionServiceTests {
     assertEquals(adaptationToVehicleClaimResponse.getClaimNumber(), claimResponse.getClaimNumber());
     assertEquals(adaptationToVehicleClaimResponse.getClaimReference(), claimResponse.getClaimReference());
 
-    verify(adaptationToVehicleSubmissionStrategy, times(1)).submit(any(ClaimRequest.class),
-        any(long.class));
     verify(equipmentOrAdaptationsSubmissionStrategy, never()).submit(any(ClaimRequest.class),
         any(long.class));
     verify(travelToWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
         any(long.class));
     verify(supportWorkerSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(adaptationToVehicleSubmissionStrategy, times(1)).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelInWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+  }
+
+  @Test
+  @DisplayName("Use appropriate strategy for a claim - TIW")
+  void useAppropriateStrategyForTiWClaim() {
+
+    ClaimResponse claimResponse =
+        claimSubmissionService.submitClaim(validTravelInWorkEmployedSubmitRequest,
+            validClaimNumber);
+
+    assertEquals(travelInWorkClaimResponse.getClaimType(), claimResponse.getClaimType());
+    assertEquals(travelInWorkClaimResponse.getClaimNumber(), claimResponse.getClaimNumber());
+    assertEquals(travelInWorkClaimResponse.getClaimReference(), claimResponse.getClaimReference());
+
+    verify(equipmentOrAdaptationsSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelToWorkSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(supportWorkerSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(adaptationToVehicleSubmissionStrategy, never()).submit(any(ClaimRequest.class),
+        any(long.class));
+    verify(travelInWorkSubmissionStrategy, times(1)).submit(any(ClaimRequest.class),
         any(long.class));
   }
 }

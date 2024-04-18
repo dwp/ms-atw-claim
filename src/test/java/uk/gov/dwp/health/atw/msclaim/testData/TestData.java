@@ -22,6 +22,8 @@ import uk.gov.dwp.health.atw.msclaim.models.Payee;
 import uk.gov.dwp.health.atw.msclaim.models.PayeeDetails;
 import uk.gov.dwp.health.atw.msclaim.models.RequestIdRequest;
 import uk.gov.dwp.health.atw.msclaim.models.TravelDetails;
+import uk.gov.dwp.health.atw.msclaim.models.TravelInWork;
+import uk.gov.dwp.health.atw.msclaim.models.TravelInWorkClaim;
 import uk.gov.dwp.health.atw.msclaim.models.TravelToWork;
 import uk.gov.dwp.health.atw.msclaim.models.TravelToWorkClaim;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType;
@@ -37,6 +39,7 @@ public class TestData {
   public static final String NINO = "AA370773A";
   public static final String ATW_NUMBER = "ATW1234567";
   public static final String POSTCODE = "NE26 4RS";
+  public static final String END_POSTCODE = "LS1 1NS";
   public static final String FORENAME = "Odin";
   public static final String SURNAME = "Surtsson";
   public static final String EMAIL = "odin.surtsson@norse.com";
@@ -82,6 +85,9 @@ public class TestData {
   public static final ClaimResponse supportWorkerClaimResponse =
       ClaimResponse.of(validClaimNumber, ClaimType.SUPPORT_WORKER);
 
+  public static final ClaimResponse travelInWorkClaimResponse =
+      ClaimResponse.of(validClaimNumber, ClaimType.TRAVEL_IN_WORK);
+
   public static final Date dateOfPurchase = Date.builder()
       .dd("29")
       .mm("09")
@@ -124,6 +130,18 @@ public class TestData {
   public static final TravelDetails invalidTravelDetailsForTaxi = TravelDetails.builder()
       .howDidYouTravelForWork("taxi")
       .journeysOrMileage("journeys")
+      .build();
+
+  public static final TravelInWorkClaim travelInWorkClaim = TravelInWorkClaim.builder()
+      .dayOfTravel(12)
+      .startPostcode(POSTCODE)
+      .endPostcode(END_POSTCODE)
+      .costOfTravel(2.0)
+      .build();
+
+  public static final TravelInWork travelInWorkClaimForOneMonth = TravelInWork.builder()
+      .monthYear(monthYearOfSupport)
+      .claim(asList(travelInWorkClaim, travelInWorkClaim))
       .build();
 
   public static final EquipmentOrAdaptation equipmentOrAdaptation = EquipmentOrAdaptation.builder()

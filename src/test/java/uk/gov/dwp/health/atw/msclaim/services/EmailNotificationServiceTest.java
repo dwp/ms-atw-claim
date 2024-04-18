@@ -10,6 +10,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.ContactInformationTestData.
 import static uk.gov.dwp.health.atw.msclaim.testData.ContactInformationTestData.submittedContactInformationRequestWithNullEmail;
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.submittedEquipmentOrAdaptationRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForTwoMonthsRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedForTwoMonthsTravelInWorkEmployedClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftForTwoMonthsTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftWithNoClaimantEmail;
 
@@ -143,6 +144,32 @@ class EmailNotificationServiceTest {
   }
 
   @Test
+  @DisplayName("send notification email to workplace contact to review claim for Travel In Work")
+  void sendNotificationEmailToWorkplaceContactToReviewTravelInWorkClaim() {
+
+    ArgumentCaptor<EmailNotificationRequest> argument =
+            ArgumentCaptor.forClass(EmailNotificationRequest.class);
+
+    emailNotificationService.notifyWorkplaceContactOfClaimToReview(submittedForTwoMonthsTravelInWorkEmployedClaimRequest);
+
+    verify(notificationService, times(1)).sendEmail(argument.capture());
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.findAndRegisterModules();
+
+    EmailNotificationRequest actualEmailNotificationRequest =
+            objectMapper.convertValue(argument.getValue(), EmailNotificationRequest.class);
+
+    assertEquals("email", actualEmailNotificationRequest.getNotificationType());
+    assertEquals("1", actualEmailNotificationRequest.getNotificationTemplate());
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getWorkplaceContact().getEmailAddress(), actualEmailNotificationRequest.getNotificationDestination());
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getClaimant().getForename(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_FIRST_NAME"));
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getClaimant().getSurname(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_LAST_NAME"));
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getWorkplaceContact().getFullName(), actualEmailNotificationRequest.getNotificationData().get("CONFIRMERS_FULL_NAME"));
+    assertEquals("TIW000000" + submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getId(), actualEmailNotificationRequest.getNotificationData().get("CLAIM_NUMBER"));
+  }
+
+  @Test
   @DisplayName("send notification email to claimant that an email has been sent to the workplace contact")
   void sendNotificationEmailToClaimantThatRequestHasBeenSentToWorkplaceContact() {
 
@@ -165,6 +192,31 @@ class EmailNotificationServiceTest {
     assertEquals(submittedLiftForTwoMonthsTravelToWorkClaimRequest.getClaimant().getSurname(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_LAST_NAME"));
     assertEquals(submittedLiftForTwoMonthsTravelToWorkClaimRequest.getWorkplaceContact().getFullName(), actualEmailNotificationRequest.getNotificationData().get("CONFIRMERS_FULL_NAME"));
     assertEquals( "TW0000000" + submittedLiftForTwoMonthsTravelToWorkClaimRequest.getId(), actualEmailNotificationRequest.getNotificationData().get("CLAIM_NUMBER"));
+  }
+
+  @Test
+  @DisplayName("send notification email to claimant that an email has been sent to the workplace contact - TIW")
+  void sendNotificationEmailToClaimantThatRequestHasBeenSentToWorkplaceContactForTiW() {
+
+    ArgumentCaptor<EmailNotificationRequest> argument =
+        ArgumentCaptor.forClass(EmailNotificationRequest.class);
+
+    emailNotificationService.notifyClaimantThatRequestHasBeenSentToWorkplaceContact(submittedForTwoMonthsTravelInWorkEmployedClaimRequest);
+    verify(notificationService, times(1)).sendEmail(argument.capture());
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.findAndRegisterModules();
+
+    EmailNotificationRequest actualEmailNotificationRequest =
+        objectMapper.convertValue(argument.getValue(), EmailNotificationRequest.class);
+
+    assertEquals("email", actualEmailNotificationRequest.getNotificationType());
+    assertEquals("5", actualEmailNotificationRequest.getNotificationTemplate());
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getClaimant().getEmailAddress(), actualEmailNotificationRequest.getNotificationDestination());
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getClaimant().getForename(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_FIRST_NAME"));
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getClaimant().getSurname(), actualEmailNotificationRequest.getNotificationData().get("CLAIMANTS_LAST_NAME"));
+    assertEquals(submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getWorkplaceContact().getFullName(), actualEmailNotificationRequest.getNotificationData().get("CONFIRMERS_FULL_NAME"));
+    assertEquals( "TIW000000" + submittedForTwoMonthsTravelInWorkEmployedClaimRequest.getId(), actualEmailNotificationRequest.getNotificationData().get("CLAIM_NUMBER"));
   }
 
   @Test

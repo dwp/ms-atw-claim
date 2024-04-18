@@ -6,11 +6,11 @@ project:
   - project_id: 28555026
     component_name: ms-claim
 
-    version: 1.17.0
+    version: 1.18.0
 
     last_verified:
-      date: "2024-02-28"
-      name: "@steven.davies2"
+      date: "2024-04-17"
+      name: "@steve.davies2"
 
     tags:
       payments: false

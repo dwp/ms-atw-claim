@@ -39,6 +39,7 @@ import uk.gov.dwp.health.atw.msclaim.models.validator.ConfirmPayee;
     @JsonSubTypes.Type(value = EquipmentOrAdaptationClaimRequest.class,
         name = "EQUIPMENT_OR_ADAPTATION"),
     @JsonSubTypes.Type(value = TravelToWorkClaimRequest.class, name = "TRAVEL_TO_WORK"),
+    @JsonSubTypes.Type(value = TravelInWorkClaimRequest.class, name = "TRAVEL_IN_WORK"),
     @JsonSubTypes.Type(value = SupportWorkerClaimRequest.class, name = "SUPPORT_WORKER"),
     @JsonSubTypes.Type(value = AdaptationToVehicleClaimRequest.class,
         name = "ADAPTATION_TO_VEHICLE")

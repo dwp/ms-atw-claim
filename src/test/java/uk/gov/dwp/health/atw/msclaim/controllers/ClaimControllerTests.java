@@ -30,6 +30,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.invalidClaimRefere
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.rejectedClaimsForNinoAndClaimTypeCountResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.rejectedClaimsForNinoCountResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.supportWorkerClaimResponse;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelInWorkClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelToWorkClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceForEquipmentOrAdaptationClaim;
@@ -37,6 +38,10 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenc
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimReferenceNinoForTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validRequestRejectedClaimsForNino;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validRequestRejectedClaimsForNinoAndClaimType;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.claimResponseTiw;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedAcceptedTravelInWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedRejectedTravelInWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkEmployedSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.awaitingAgentApprovalTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.claimResponseTtw;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.drsErrorTravelToWorkClaimRequest;
@@ -51,9 +56,11 @@ import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.in
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectedSupportWorkerWorkplaceContactReasonOver300Char;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidAcceptedEquipmentOrAdaptationClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedTravelInWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validAcceptedTravelToWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.invalidRejectEquipmentOrAdaptationClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedSupportWorkerClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.validRejectedTravelInWorkClaim;
 import static uk.gov.dwp.health.atw.msclaim.utils.TestUtils.asJsonString;
 
 import java.util.List;
@@ -83,6 +90,7 @@ import uk.gov.dwp.health.atw.msclaim.models.exceptions.WrongClaimOrBadRequestExc
 import uk.gov.dwp.health.atw.msclaim.models.requests.AdaptationToVehicleClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EquipmentOrAdaptationClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
+import uk.gov.dwp.health.atw.msclaim.models.requests.TravelInWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.TravelToWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.WorkplaceContactRequest;
 import uk.gov.dwp.health.atw.msclaim.repositories.DatabaseSequenceRepository;
@@ -153,6 +161,22 @@ class ClaimControllerTests {
             .content(asJsonString(validLiftTravelToWorkSubmitRequest)))
         .andExpect(status().isCreated())
         .andExpect(content().json(asJsonString(travelToWorkClaimResponse)));
+  }
+
+  @Test
+  @DisplayName("/submit creates record successfully -TIW")
+  void submitRecordOkTiW() throws Exception {
+
+    when(databaseSequenceRepository.getNextValueInSequence(any(String.class))).thenReturn(5L);
+
+    when(claimSubmissionService.submitClaim(any(TravelInWorkClaimRequest.class), eq(5L)))
+        .thenReturn(claimResponseTiw);
+
+    mockMvc.perform(post("/submit")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(validTravelInWorkEmployedSubmitRequest)))
+        .andExpect(status().isCreated())
+        .andExpect(content().json(asJsonString(travelInWorkClaimResponse)));
   }
 
   @Test
@@ -259,6 +283,19 @@ class ClaimControllerTests {
   }
 
   @Test
+  @DisplayName("/accept updated claim record successfully - TiW")
+  void acceptTiWWorkplaceContactSuccessful() throws Exception {
+    when(claimService.counterSignHandler(eq(CounterSignType.ACCEPT),
+        any(WorkplaceContactRequest.class)))
+        .thenReturn(submittedAcceptedTravelInWorkClaimRequest);
+
+    mockMvc.perform(put("/accept")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(validAcceptedTravelInWorkClaim)))
+        .andExpect(status().isNoContent());
+  }
+
+  @Test
   @DisplayName("/accept failed due claim number not found")
   void acceptWorkplaceContactWithClaimReferenceNotFound() throws Exception {
     when(claimService.counterSignHandler(eq(CounterSignType.ACCEPT),
@@ -329,6 +366,19 @@ class ClaimControllerTests {
     mockMvc.perform(put("/reject")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(validRejectedSupportWorkerClaim)))
+        .andExpect(status().isNoContent());
+  }
+
+  @Test
+  @DisplayName("/reject updated claim record successfully -TiW")
+  void rejectTiWWorkplaceContactSuccessful() throws Exception {
+    when(claimService.counterSignHandler(eq(CounterSignType.REJECT),
+        any(WorkplaceContactRequest.class)))
+        .thenReturn(submittedRejectedTravelInWorkClaimRequest);
+
+    mockMvc.perform(put("/reject")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(validRejectedTravelInWorkClaim)))
         .andExpect(status().isNoContent());
   }
 

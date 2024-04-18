@@ -154,10 +154,30 @@ public class WorkplaceContactTestData {
           .reason("not valid claim")
           .build();
 
+  public static WorkplaceContactRequest validRejectedTravelInWorkClaim =
+      WorkplaceContactRequest.builder()
+          .claimNumber(validClaimNumber)
+          .claimType(ClaimType.TRAVEL_IN_WORK)
+          .organisation("Organisation")
+          .jobTitle("boss")
+          .address(address)
+          .reason("not valid claim")
+          .build();
+
   public static WorkplaceContactRequest validAcceptedTravelToWorkClaim =
       WorkplaceContactRequest.builder()
           .claimNumber(validClaimNumber)
           .claimType(ClaimType.TRAVEL_TO_WORK)
+          .organisation("Organisation")
+          .jobTitle("boss")
+          .declarationVersion(1.0)
+          .address(address)
+          .build();
+
+  public static WorkplaceContactRequest validAcceptedTravelInWorkClaim =
+      WorkplaceContactRequest.builder()
+          .claimNumber(validClaimNumber)
+          .claimType(ClaimType.TRAVEL_IN_WORK)
           .organisation("Organisation")
           .jobTitle("boss")
           .declarationVersion(1.0)

@@ -53,7 +53,6 @@ public class TravelToWorkTestData {
       .claimType(ClaimType.TRAVEL_TO_WORK)
       .cost(22.11)
       .hasContributions(true)
-      .hasContributions(true)
       .atwNumber(ATW_NUMBER)
       .claimant(claimant)
       .payee(newPayee)

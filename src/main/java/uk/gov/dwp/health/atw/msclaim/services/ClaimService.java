@@ -9,6 +9,7 @@ import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus.REPLACED_BY
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.ADAPTATION_TO_VEHICLE;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.EQUIPMENT_OR_ADAPTATION;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.SUPPORT_WORKER;
+import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.TRAVEL_IN_WORK;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType.TRAVEL_TO_WORK;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.CounterSignType.ACCEPT;
 import static uk.gov.dwp.health.atw.msclaim.models.enums.CounterSignType.REJECT;
@@ -38,10 +39,12 @@ import uk.gov.dwp.health.atw.msclaim.models.exceptions.ClaimHasWrongStatusExcept
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.NoClaimRecordFoundException;
 import uk.gov.dwp.health.atw.msclaim.models.exceptions.WrongClaimOrBadRequestException;
 import uk.gov.dwp.health.atw.msclaim.models.messaging.SubmitToClaimBundlerEvent;
+import uk.gov.dwp.health.atw.msclaim.models.requests.AdaptationToVehicleClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequestWithWorkplaceContact;
 import uk.gov.dwp.health.atw.msclaim.models.requests.EquipmentOrAdaptationClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.SupportWorkerClaimRequest;
+import uk.gov.dwp.health.atw.msclaim.models.requests.TravelInWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.TravelToWorkClaimRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.UpdateWorkplaceContactRequest;
 import uk.gov.dwp.health.atw.msclaim.models.requests.WorkplaceContactRequest;
@@ -71,6 +74,8 @@ public class ClaimService {
   final ClaimRepository<TravelToWorkClaimRequest> travelToWorkClaimRepository;
   final ClaimRepository<SupportWorkerClaimRequest> supportWorkClaimRepository;
   final ClaimRepository<EquipmentOrAdaptationClaimRequest> equipmentOrAdaptationRepository;
+  final ClaimRepository<AdaptationToVehicleClaimRequest> adaptationToVehicleRepository;
+  final ClaimRepository<TravelInWorkClaimRequest> travelInWorkClaimRepository;
 
   final ClaimPublisher claimPublisher;
   final EmailNotificationService emailNotificationService;
@@ -80,12 +85,18 @@ public class ClaimService {
                       ClaimRepository<SupportWorkerClaimRequest> supportWorkerClaimRequest,
                       ClaimRepository<EquipmentOrAdaptationClaimRequest>
                           equipmentOrAdaptationRepository,
+                      ClaimRepository<AdaptationToVehicleClaimRequest>
+                          adaptationToVehicleRepository,
+                      ClaimRepository<TravelInWorkClaimRequest>
+                          travelInWorkClaimRepository,
                       ClaimPublisher claimPublisher,
                       EmailNotificationService emailNotificationService) {
     this.claimRepository = claimRepository;
     this.travelToWorkClaimRepository = travelToWorkClaimRepository;
     this.supportWorkClaimRepository = supportWorkerClaimRequest;
     this.equipmentOrAdaptationRepository = equipmentOrAdaptationRepository;
+    this.adaptationToVehicleRepository = adaptationToVehicleRepository;
+    this.travelInWorkClaimRepository = travelInWorkClaimRepository;
     this.claimPublisher = claimPublisher;
     this.emailNotificationService = emailNotificationService;
   }
@@ -137,6 +148,9 @@ public class ClaimService {
     } else if (claimType == SUPPORT_WORKER) {
       claimRecord = supportWorkClaimRepository.findClaimByIdAndClaimType(
           workplaceContactRequest.getClaimNumber(), claimType.toString());
+    } else if (claimType == TRAVEL_IN_WORK) {
+      claimRecord = travelInWorkClaimRepository.findClaimByIdAndClaimType(
+          workplaceContactRequest.getClaimNumber(), claimType.toString());
     } else {
       throw new WrongClaimOrBadRequestException(claimType + CANNOT_BE_WORKPLACE_CONTACT);
     }
@@ -178,6 +192,16 @@ public class ClaimService {
 
         if (employmentStatus.equalsIgnoreCase(SELFEMPLOYED.toString())) {
           throw new WrongClaimOrBadRequestException(TRAVEL_TO_WORK
+              + TW_CANNOT_RE_CREATE_PREVIOUS_CLAIM);
+        }
+      } else if (claimRequest instanceof TravelInWorkClaimRequest) {
+
+        TravelInWorkClaimRequest travelInWorkClaimRequest = (TravelInWorkClaimRequest) claimRequest;
+        String employmentStatus = travelInWorkClaimRequest
+            .getWorkplaceContact().getEmploymentStatus();
+
+        if (employmentStatus.equalsIgnoreCase(SELFEMPLOYED.toString())) {
+          throw new WrongClaimOrBadRequestException(TRAVEL_IN_WORK
               + TW_CANNOT_RE_CREATE_PREVIOUS_CLAIM);
         }
       }
@@ -407,6 +431,22 @@ public class ClaimService {
             .setEmailAddress(updateClaimRequest.getWorkplaceContact().getEmailAddress());
 
         response = claimRepository.save(supportWorkerClaimRequest);
+      } else if (claimRequest instanceof TravelInWorkClaimRequest) {
+        TravelInWorkClaimRequest travelInWorkClaimRequest = (TravelInWorkClaimRequest) claimRequest;
+        String employmentStatus =
+            travelInWorkClaimRequest.getWorkplaceContact().getEmploymentStatus();
+
+        if (!employmentStatus.equalsIgnoreCase("employed")) {
+          throw new WrongClaimOrBadRequestException(
+              "Cannot update work place details for someone self-employed");
+        }
+
+        travelInWorkClaimRequest.getWorkplaceContact()
+            .setFullName(updateClaimRequest.getWorkplaceContact().getFullName());
+        travelInWorkClaimRequest.getWorkplaceContact()
+            .setEmailAddress(updateClaimRequest.getWorkplaceContact().getEmailAddress());
+
+        response = claimRepository.save(travelInWorkClaimRequest);
       }
     }
 

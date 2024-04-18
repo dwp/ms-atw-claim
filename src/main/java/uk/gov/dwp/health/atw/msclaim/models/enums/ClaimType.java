@@ -7,7 +7,8 @@ public enum ClaimType {
   EQUIPMENT_OR_ADAPTATION("EA"),
   TRAVEL_TO_WORK("TW"),
   SUPPORT_WORKER("SW"),
-  ADAPTATION_TO_VEHICLE("AV");
+  ADAPTATION_TO_VEHICLE("AV"),
+  TRAVEL_IN_WORK("TIW");
 
   private static final Map<String, ClaimType> BY_LABEL = new HashMap<>();
   public final String label;
