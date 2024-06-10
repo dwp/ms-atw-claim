@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.19.0 - (2024-06-04)
+* Update fragments
+* SAAS references removed
+* Dependancy Suppressions
+
 # 1.18.0 - (2024-04-17)
 * Update fragments
 * Added Travel in Work functionality
