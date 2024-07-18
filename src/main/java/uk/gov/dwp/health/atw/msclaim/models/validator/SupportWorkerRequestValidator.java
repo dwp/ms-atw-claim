@@ -1,7 +1,7 @@
 package uk.gov.dwp.health.atw.msclaim.models.validator;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import uk.gov.dwp.health.atw.msclaim.models.SupportWorker;
 import uk.gov.dwp.health.atw.msclaim.models.SupportWorkerClaim;

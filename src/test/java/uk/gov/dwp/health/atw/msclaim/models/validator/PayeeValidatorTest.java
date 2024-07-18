@@ -10,7 +10,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithoutEmailAddress;
 
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

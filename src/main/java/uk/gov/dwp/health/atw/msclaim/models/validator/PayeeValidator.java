@@ -1,7 +1,7 @@
 package uk.gov.dwp.health.atw.msclaim.models.validator;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import uk.gov.dwp.health.atw.msclaim.models.Payee;
 
 public class PayeeValidator implements ConstraintValidator<ConfirmPayee, Payee> {

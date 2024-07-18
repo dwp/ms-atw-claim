@@ -20,6 +20,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestDa
 import static uk.gov.dwp.health.atw.msclaim.testData.EquipmentOrAdaptationTestData.validEquipmentOrAdaptationSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.claimResponseSw;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedRejectedSupportWorkerClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForOneMonthRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.adaptationToVehicleClaimResponse;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.claimRetrievalRequest;
@@ -74,7 +75,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import uk.gov.dwp.health.atw.msclaim.controllers.utils.CustomExceptionHandler;
 import uk.gov.dwp.health.atw.msclaim.controllers.utils.ServiceExceptionHandler;
 import uk.gov.dwp.health.atw.msclaim.models.ClaimReferenceNinoRequest;
 import uk.gov.dwp.health.atw.msclaim.models.ClaimReferenceRequest;
@@ -100,7 +103,7 @@ import uk.gov.dwp.health.atw.msclaim.services.ClaimSubmissionService;
 @SpringBootTest(classes = ClaimController.class)
 @EnableWebMvc
 @AutoConfigureMockMvc
-@ImportAutoConfiguration(ServiceExceptionHandler.class)
+@ImportAutoConfiguration({ServiceExceptionHandler.class, CustomExceptionHandler.class})
 class ClaimControllerTests {
 
   @Autowired
@@ -448,13 +451,14 @@ class ClaimControllerTests {
     when(claimService.counterSignHandler(eq(CounterSignType.REJECT),
         any(WorkplaceContactRequest.class)))
         .thenThrow(new WrongClaimOrBadRequestException(
-            submittedEquipmentOrAdaptationRequest.getClaimType() +
+            submittedSupportWorkerClaimForOneMonthRequest.getClaimType() +
                 " cannot be counter sign rejected"));
 
     mockMvc.perform(put("/reject")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(invalidRejectedSupportWorkerWorkplaceContactReasonOver300Char)))
         .andExpect(status().isBadRequest())
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(content().string(""));
   }
 

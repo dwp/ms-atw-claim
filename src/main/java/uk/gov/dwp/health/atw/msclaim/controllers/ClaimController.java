@@ -1,7 +1,7 @@
 package uk.gov.dwp.health.atw.msclaim.controllers;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import javax.validation.Valid;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

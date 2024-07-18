@@ -8,7 +8,7 @@ import uk.gov.dwp.health.crypto.CryptoConfig;
 
 @Getter
 @Setter
-@Configuration
+@Configuration("EventCryptoConfigProperties")
 @ConfigurationProperties(prefix = "uk.gov.dwp.health.event")
 public class EventCryptoConfigProperties {
   CryptoConfig cryptoConfig;

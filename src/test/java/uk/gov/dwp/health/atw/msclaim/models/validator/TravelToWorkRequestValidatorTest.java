@@ -18,7 +18,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.invali
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftTravelToWorkSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validTaxiTravelToWorkSubmitRequest;
 
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

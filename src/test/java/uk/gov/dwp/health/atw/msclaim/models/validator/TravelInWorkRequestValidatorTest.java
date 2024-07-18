@@ -14,7 +14,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.invali
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkEmployedSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkSelfEmployedSubmitRequest;
 
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

@@ -1,7 +1,7 @@
 package uk.gov.dwp.health.atw.msclaim.models.requests;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.Map;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;

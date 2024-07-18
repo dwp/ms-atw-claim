@@ -5,39 +5,49 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.18</version>
+		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>uk.gov.dwp.health.atw</groupId>
 	<artifactId>ms-claim</artifactId>
-	<version>1.19.0</version>
+	<version>1.20.0</version>
 	<name>ms-claim</name>
 	<description>Claim service for AtW</description>
 	<properties>
-		<java.version>11</java.version>
-		<plugin.spotbugs.version>4.0.0</plugin.spotbugs.version>
-		<dwp.encoded-log.version>2.0.5</dwp.encoded-log.version>
-		<checkstyle.plugin.version>3.2.0</checkstyle.plugin.version>
-		<checkstyle.version>9.2.1</checkstyle.version>
-		<plugin.jacoco.version>0.8.8</plugin.jacoco.version>
-		<plugin.surefire.version>2.22.2</plugin.surefire.version>
-		<pitest.version>1.5.2</pitest.version>
-		<pitest-plugin.version>0.16</pitest-plugin.version>
-		<aws.version>1.12.648</aws.version>
-		<maven-project-info-reports-plugin.version>3.4.1</maven-project-info-reports-plugin.version>
-		<maven-site-plugin.version>3.12.0</maven-site-plugin.version>
-		<dwp.message-broker.version>2.9.0-a2cbc08c</dwp.message-broker.version>
-		<owasp.version>8.1.2</owasp.version>
+		<java.version>17</java.version>
+		<plugin.spotbugs.maven.version>4.7.3.4</plugin.spotbugs.maven.version>
+		<plugin.spotbugs.version>4.7.3</plugin.spotbugs.version>
+		<dwp.encoded-log.version>3.0.0-dfda47f2</dwp.encoded-log.version>
+		<checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
+		<checkstyle.version>10.16.0</checkstyle.version>
+		<plugin.jacoco.version>0.8.10</plugin.jacoco.version>
+		<plugin.surefire.version>3.2.5</plugin.surefire.version>
+		<pitest.version>1.16.1</pitest.version>
+		<pitest-plugin.version>1.2.1</pitest-plugin.version>
+		<aws.version>1.12.725</aws.version>
+		<maven-project-info-reports-plugin.version>3.5.0</maven-project-info-reports-plugin.version>
+		<maven-site-plugin.version>3.12.1</maven-site-plugin.version>
+		<dwp.message-broker.version>3.4.0-bd00860c</dwp.message-broker.version>
+		<owasp.version>10.0.2</owasp.version>
 		<sonar.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.exclusions>
 		<sonar.coverage.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.coverage.exclusions>
-		<snakeyaml.version>1.33</snakeyaml.version> <!-- Override default version used within Spring Boot (1.30) to fix CVE-2022-25857 -->
-		<jackson-databind.version>2.13.5</jackson-databind.version>
-		<tomcat.version>9.0.83</tomcat.version><!-- Override default version used within Spring Boot to fix CVE-2023-44487, CVE-2023-42794, CVE-2023-42795, CVE-2023-45648, CVE-2023-46589 -->
+		<jackson-databind.version>2.17.0</jackson-databind.version>
+		<annotations.version>3.0.1u2</annotations.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-databind.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-databind.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson-databind.version}</version>
 		</dependency>
 		<dependency>
@@ -63,7 +73,7 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
-			<version>3.3.5</version>
+			<version>4.1.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -96,6 +106,12 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>annotations</artifactId>
+			<version>${annotations.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>uk.gov.dwp.health.integration</groupId>
 			<artifactId>message-broker-integration-autoconfigure</artifactId>
 			<version>${dwp.message-broker.version}</version>
@@ -119,7 +135,7 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-inline</artifactId>
 			<!-- version needs to be >= 3.4.0 -->
-			<version>3.5.13</version>
+			<version>5.2.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -136,17 +152,28 @@
 	</dependencyManagement>
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<mainClass>uk.gov.dwp.health.atw.msclaim.MsClaimApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<!-- TODO workaround for bc-fips new version compatibility with spring, remove in the future -->
+					<loaderImplementation>CLASSIC</loaderImplementation>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -189,7 +216,10 @@
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>${plugin.spotbugs.version}</version>
+				<version>${plugin.spotbugs.maven.version}</version>
+				<configuration>
+					<excludeFilterFile>spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>com.github.spotbugs</groupId>

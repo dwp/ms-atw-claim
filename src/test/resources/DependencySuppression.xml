@@ -1,54 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
     <suppress>
-        <notes><![CDATA[
-file name: spring-web* //A potential threat - spring won't fix this as some internal
- implementation depends on unsafe deserialisation
- https://github.com/spring-projects/spring-framework/issues/24434#issuecomment-579669626,
- however, there are no outward facing HTTP Invoker endpoints in this repo.
-]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework.*$</packageUrl>
-        <cve>CVE-2016-1000027</cve>
-        <cve>CVE-2024-22243</cve>
-        <cve>CVE-2024-22262</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: snakeyaml* // this is temporary until snakeyaml releases a fix.
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.yaml.snakeyaml.*$</packageUrl>
-        <cve>CVE-2022-1471</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: bouncycastle* // this is temporary until bouncycastle releases a fix.
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.bouncycastle.*$</packageUrl>
-        <cve>CVE-2022-45146</cve>
+        <notes>
+            <![CDATA[
+        file name: bc-fips-1.0.2.4.jar until a fix is available this is the latest version
+        ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bc\-fips@.*$</packageUrl>
         <cve>CVE-2023-33202</cve>
         <cve>CVE-2024-29857</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: fasterxml* // this is temporary until fasterxml releases a fix.
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/com\.fasterxml.*$</packageUrl>
-        <cve>CVE-2023-35116</cve>
-        <cve>CVE-2024-23080</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: joda-time* // this is temporary until joda-time releases a fix.
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/joda-time/joda-time.*$</packageUrl>
-        <cve>CVE-2024-23080</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: logback* // this is temporary until logback releases a fix.
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/ch\.qos.logback.*$</packageUrl>
-        <cve>CVE-2023-6378</cve>
-        <cve>CVE-2023-6481</cve>
     </suppress>
 </suppressions>

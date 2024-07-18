@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.20.0 - (2024-07-16)
+* Upgrade to Java 17
+* Upgrade to Spring boot 3.2.5
+* Updated dependency Suppressions
+* Updated fragments
+
 # 1.19.0 - (2024-06-04)
 * Update fragments
 * SAAS references removed

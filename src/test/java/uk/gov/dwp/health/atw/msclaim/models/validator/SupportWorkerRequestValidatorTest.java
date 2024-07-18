@@ -8,7 +8,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.inval
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.invalidWorkplaceContactForSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequest;
 
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
