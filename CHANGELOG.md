@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.21.0 - (2024-08-21)
+* Updated dependency Suppressions
+* Updated distroless version
+* Updated fragments
+
 # 1.20.0 - (2024-07-16)
 * Upgrade to Java 17
 * Upgrade to Spring boot 3.2.5
