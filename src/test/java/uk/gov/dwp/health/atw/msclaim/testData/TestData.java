@@ -149,9 +149,6 @@ public class TestData {
       .dateOfPurchase(dateOfPurchase)
       .build();
 
-  public static final List<EquipmentOrAdaptation> equipmentOrAdaptations =
-      singletonList(equipmentOrAdaptation);
-
   public static final AdaptationToVehicleClaim adaptationToVehicleClaim = AdaptationToVehicleClaim.builder()
       .description("Item 1")
       .dateOfInvoice(dateOfPurchase)

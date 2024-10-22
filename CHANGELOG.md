@@ -1,5 +1,15 @@
 # Changelog
 
+# 1.22.0 - (2024-09-25)
+* Updated dependencies
+* Updated dependency suppressions
+* Updated distroless version
+* Updated mongo image version
+* Updated fragments
+* Upgrade to Spring boot 3.3.3
+* Added dynatrace config
+* Adding SAE changes to the data model to reflect changes made in front end
+
 # 1.21.0 - (2024-08-21)
 * Updated dependency Suppressions
 * Updated distroless version

@@ -1,18 +1,20 @@
 package uk.gov.dwp.health.atw.msclaim.testData;
 
+import static java.util.Collections.singletonList;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.ATW_NUMBER;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.COST;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.DECLARATION_VERSION;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.INVALID_NINO;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.NINO;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.claimant;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.equipmentOrAdaptations;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.equipmentOrAdaptation;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.evidences;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
 
 import java.util.Collections;
+import java.util.Map;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimStatus;
 import uk.gov.dwp.health.atw.msclaim.models.enums.ClaimType;
 import uk.gov.dwp.health.atw.msclaim.models.requests.ClaimRequest;
@@ -36,7 +38,7 @@ public class EquipmentOrAdaptationTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
-          .claim(equipmentOrAdaptations)
+          .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .declarationVersion(DECLARATION_VERSION)
           .build();
@@ -52,7 +54,7 @@ public class EquipmentOrAdaptationTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress)
-          .claim(equipmentOrAdaptations)
+          .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .declarationVersion(DECLARATION_VERSION)
           .build();
@@ -67,7 +69,7 @@ public class EquipmentOrAdaptationTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
-          .claim(equipmentOrAdaptations)
+          .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .declarationVersion(DECLARATION_VERSION)
           .build();
@@ -85,7 +87,7 @@ public class EquipmentOrAdaptationTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_DRS_UPLOAD)
           .declarationVersion(DECLARATION_VERSION)
-          .claim(equipmentOrAdaptations)
+          .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .build();
 
@@ -103,7 +105,7 @@ public class EquipmentOrAdaptationTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_DRS_UPLOAD)
           .declarationVersion(DECLARATION_VERSION)
-          .claim(equipmentOrAdaptations)
+          .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .build();
 
@@ -120,7 +122,7 @@ public class EquipmentOrAdaptationTestData {
           .payee(newPayee)
           .claimStatus(ClaimStatus.AWAITING_DRS_UPLOAD)
           .declarationVersion(DECLARATION_VERSION)
-          .claim(equipmentOrAdaptations)
+          .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .previousClaimId(1L)
           .build();

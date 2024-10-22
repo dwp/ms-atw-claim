@@ -16,4 +16,12 @@
         <Class name="uk.gov.dwp.health.atw.msclaim.temp.service.NotificationService"/>
         <Bug pattern="EI_EXPOSE_REP2"/>
     </Match>
+    <Match>
+        <Package name="~uk.gov.dwp.health.atw.msclaim.models.exceptions.*"/>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <Match>
+        <Package name="~uk.gov.dwp.health.atw.msclaim.models.messaging.*"/>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
 </FindBugsFilter>

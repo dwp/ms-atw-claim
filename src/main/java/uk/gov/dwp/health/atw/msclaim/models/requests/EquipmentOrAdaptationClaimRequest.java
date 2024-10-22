@@ -3,6 +3,7 @@ package uk.gov.dwp.health.atw.msclaim.models.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,5 +32,5 @@ public class EquipmentOrAdaptationClaimRequest extends ClaimRequest {
   @JsonProperty(value = "claim")
   @NotNull
   @NonNull
-  private List<EquipmentOrAdaptation> claim;
+  private Map<String, List<EquipmentOrAdaptation>> claim;
 }

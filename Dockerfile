@@ -1,4 +1,7 @@
-FROM gcr.io/distroless/java17@sha256:2578479b0d22bdf9dba8320de62969793b32e3226c9327b1f5e1c9f2bd3f1021
+FROM gcr.io/distroless/java17@sha256:c9400462390c919bdcbba1fd233a862af649a99e06ad6314ca9b9fbb32ebbca2
+
+COPY --from=pik94420.live.dynatrace.com/linux/oneagent-codemodules:java / /
+ENV LD_PRELOAD /opt/dynatrace/oneagent/agent/lib64/liboneagentproc.so
 
 EXPOSE 9014
 
