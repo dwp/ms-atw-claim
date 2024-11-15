@@ -9,4 +9,21 @@
         <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bc\-fips@.*$</packageUrl>
         <cve>CVE-2023-33202</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+       file name: Spring-web-6.1.11.jar:
+       ]]>
+        </notes>
+        <cve>CVE-2024-38816</cve>
+        <cve>CVE-2024-38820</cve>
+    </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+       file name: netty-common-4.1.112.Final.jar:
+       ]]>
+        </notes>
+        <cve>CVE-2024-47535</cve>
+    </suppress>
 </suppressions>

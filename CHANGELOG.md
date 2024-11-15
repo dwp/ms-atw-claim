@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.23.0 - (2024-11-13)
+* Updated dependency Suppressions
+* Dockerfile distroless version
+* Updated mongo image version
+
 # 1.22.0 - (2024-09-25)
 * Updated dependencies
 * Updated dependency suppressions
