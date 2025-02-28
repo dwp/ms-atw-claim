@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.24.0 - (2025-02-25)
+* Resolved gitlab vulnerabilities
+* Fixed pipeline
+
 # 1.23.0 - (2024-11-13)
 * Updated dependency Suppressions
 * Dockerfile distroless version
