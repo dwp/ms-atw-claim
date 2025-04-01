@@ -2,12 +2,11 @@ package uk.gov.dwp.health.atw.msclaim.models.validator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithMissingAddress;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithMissingBankDetails;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithDetailsAndAddress;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithDetailsAndBankDetails;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithMissingAccountHolderForBankDetails;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithMissingAddress;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithMissingSortCodeForBankDetails;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeWithoutEmailAddress;
 
 import jakarta.validation.ConstraintValidatorContext;
@@ -42,33 +41,27 @@ class PayeeValidatorTest {
   }
 
   @Test
-  @DisplayName("new payee which is set to true with missing bank details fails validation")
-  void isValid_newPayeeSetToTrueWithMissingBankDetails() {
-    assertFalse(payeeValidator.isValid(newPayeeWithMissingBankDetails, constraintValidatorContext));
-  }
-
-  @Test
   @DisplayName("new payee which is set true which has no payee email address")
   void isValid_newPayeeSetToTrueHasNoPayeeEmailAddress() {
     assertFalse(payeeValidator.isValid(newPayeeWithoutEmailAddress, constraintValidatorContext));
   }
 
   @Test
-  @DisplayName("new payee which is set to false has details successful")
-  void isValid_newPayeeSetToFalseHasDetails() {
+  @DisplayName("new payee which is set true which has no account holder name for bank details")
+  void isValid_newPayeeSetToTrueMissingAccountHolderNameForBankDetails() {
+    assertFalse(payeeValidator.isValid(newPayeeWithMissingAccountHolderForBankDetails, constraintValidatorContext));
+  }
+
+  @Test
+  @DisplayName("new payee which is set true which has no sort code for bank details")
+  void isValid_newPayeeSetToTrueMissingSortCodeForBankDetails() {
+    assertFalse(payeeValidator.isValid(newPayeeWithMissingSortCodeForBankDetails, constraintValidatorContext));
+  }
+
+  @Test
+  @DisplayName("new payee which is set to false has details with no email address and existing payee (bank details has account number) successful")
+  void isValid_newPayeeSetToFalseHasDetailsAndExistingPayee() {
     assertTrue(payeeValidator.isValid(
-        newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress, constraintValidatorContext));
-  }
-
-  @Test
-  @DisplayName("new payee which is set to false has details and address")
-  void isValid_newPayeeSetToFalseHasDetailsAndAddress() {
-    assertFalse(payeeValidator.isValid(newPayeeSetToFalseWithDetailsAndAddress, constraintValidatorContext));
-  }
-
-  @Test
-  @DisplayName("new payee which is set to false has details and bank details")
-  void isValid_newPayeeSetToFalseHasDetailsAndBankDetails() {
-    assertFalse(payeeValidator.isValid(newPayeeSetToFalseWithDetailsAndBankDetails, constraintValidatorContext));
+        newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress, constraintValidatorContext));
   }
 }

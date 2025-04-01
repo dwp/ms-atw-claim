@@ -9,7 +9,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.NINO;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.claimant;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.evidences;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.singleAdaptationToVehicleClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
 
@@ -59,7 +59,7 @@ public class AdaptationToVehicleTestData {
           .build();
 
   public static final AdaptationToVehicleClaimRequest
-      validAdaptationToVehicleWithNoAddressOrBankDetailsForPayeeRequest =
+      validAdaptationToVehicleWithNoAddressAndBankDetailsForExistingPayeeRequest =
       AdaptationToVehicleClaimRequest.builder()
           .nino(NINO)
           .claimType(ClaimType.EQUIPMENT_OR_ADAPTATION)
@@ -68,7 +68,7 @@ public class AdaptationToVehicleTestData {
           .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
-          .payee(newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress)
+          .payee(newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress)
           .claim(singletonMap("0", singleAdaptationToVehicleClaim))
           .journeyContext(Collections.emptyMap())
           .declarationVersion(DECLARATION_VERSION)

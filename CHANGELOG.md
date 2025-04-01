@@ -1,5 +1,16 @@
 # Changelog
 
+# 1.26.0 (2025-03-25)
+* Updating dependencies
+* Updated distroless version
+* Upgrade to Spring boot 3.4.3
+* Update Readme
+* Update data model so that account number can be included to the pdf for existing payees
+
+# 1.25.0 (2025-03-11)
+* Update version and push jobs ([a4c5371](https://gitlab.com/dwp/health/atw/components/ms-claim/-/commit/a4c5371))
+* [skip ci] ([1a86597](https://gitlab.com/dwp/health/atw/components/ms-claim/-/commit/1a86597))
+
 # 1.24.0 - (2025-02-25)
 * Resolved gitlab vulnerabilities
 * Fixed pipeline

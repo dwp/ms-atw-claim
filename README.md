@@ -13,19 +13,31 @@ Submit a claim to be saved in the mongo database
 ```json5
 {
   "claimType": "EQUIPMENT_OR_ADAPTATION",
-  "nino": "AA370773A",
+  "nino": "RN000013A",
   "atwNumber": "ATW1234567895",
   "declarationVersion": 2.1,
-  "claim": [
-    {
-      "description": "Item 1",
-      "dateOfPurchase": {
-        "dd": "22",
-        "mm": "11",
-        "yyyy": "2020"
+  "claim": {
+    "0":[
+      {
+        "description": "Item 1",
+        "dateOfPurchase": {
+          "dd": "1",
+          "mm":"1",
+          "yyyy":"1999"
+        }
       }
-    }
-  ],
+    ],
+    "1": [
+      {
+        "description": "Item 2",
+        "dateOfPurchase": {
+          "dd": "22",
+          "mm": "11",
+          "yyyy": "2020"
+        }
+      }
+    ]
+  },
   "cost": "2211",
   "hasContributions": true,
   "evidence": [
@@ -37,8 +49,8 @@ Submit a claim to be saved in the mongo database
   "payee": {
     "newPayee": true, //for EA newPayee must be true
     "details": {
-      "fullName": "George Herbert",
-      "emailAddress": "name@name.com"
+      "fullName": "INeed Paying",
+      "emailAddress": "payment@now.com"
     },
     "address": {
       "address1": "THE COTTAGE",
@@ -48,7 +60,7 @@ Submit a claim to be saved in the mongo database
       "postcode": "NE26 4RS"
     },
     "bankDetails": {
-      "accountHolderName": "George Herbert",
+      "accountHolderName": "INeed Paying",
       "sortCode": "000004",
       "accountNumber": "12345677",
       "rollNumber": "12345677"// Optional
@@ -101,29 +113,33 @@ Submit a claim to be saved in the mongo database
 ```json5
 {
   "claimType": "ADAPTATION_TO_VEHICLE",
-  "nino": "AA370773A",
+  "nino": "RN000013A",
   "atwNumber": "ATW1234567895",
   "declarationVersion": 2.1,
   "claim": {
     "0": {
-      "claimDescription": {
-        "description": "Item 1",
-        "dateOfInvoice": {
-          "dd": "22",
-          "mm": "11",
-          "yyyy": "2020"
+      "claimDescription": [
+        {
+          "description": "Item 1",
+          "dateOfInvoice": {
+            "dd": "22",
+            "mm": "11",
+            "yyyy": "2020"
+          }
         }
-      }
+      ]
     },
     "1": {
-      "claimDescription": {
-        "description": "Item 2",
-        "dateOfInvoice": {
-          "dd": "2",
-          "mm": "11",
-          "yyyy": "2020"
+      "claimDescription": [
+        {
+          "description": "Item 2",
+          "dateOfInvoice": {
+            "dd": "2",
+            "mm": "11",
+            "yyyy": "2020"
+          }
         }
-      }
+      ]
     }
   },
   "cost": "2211",
@@ -137,8 +153,8 @@ Submit a claim to be saved in the mongo database
   "payee": {
     "newPayee": true, //for AV newPayee must be true
     "details": {
-      "fullName": "George Herbert",
-      "emailAddress": "name@name.com"
+      "fullName": "INeed Paying",
+      "emailAddress": "payment@now.com"
     },
     "address": {
       "address1": "THE COTTAGE",
@@ -148,7 +164,7 @@ Submit a claim to be saved in the mongo database
       "postcode": "NE26 4RS"
     },
     "bankDetails": {
-      "accountHolderName": "George Herbert",
+      "accountHolderName": "INeed Paying",
       "sortCode": "000004",
       "accountNumber": "12345677",
       "rollNumber": "12345677"// Optional
@@ -200,10 +216,10 @@ Submit a claim to be saved in the mongo database
 
 ```json5
 {
-  "nino": "AA370773A",
+  "claimType": "SUPPORT_WORKER",
+  "nino": "RN000013A",
   "declarationVersion": 2.1,
   "atwNumber": "ATW1234567895",
-  "claimType": "SUPPORT_WORKER",
   "previousClaimId": 1, // Optional. This field links the previous claim to the claim that is being resubmitted.
   "nameOfSupport": "Joe Bloggs", // Optional
   "claim": {
@@ -277,10 +293,10 @@ Submit a claim to be saved in the mongo database
       "address4": "WHITLEY BAY", // Optional
       "postcode": "NE26 4RS"
     },
-    "bankDetails": { // if newPayee is set to false, bankDetails is not required
+    "bankDetails": { // if newPayee is set to false, bankDetails accountNumber is the only one required
       "accountHolderName": "Ineed Paying",
       "sortCode": "000004",
-      "accountNumber": "12345677"
+      "accountNumber": "12345677" //required
     }
   },
   "workplaceContact": {
@@ -333,10 +349,10 @@ Submit a claim to be saved in the mongo database
 
 ```json5
 {
-  "nino": "AA370773A",
+  "claimType": "TRAVEL_TO_WORK",
+  "nino": "RN000013A",
   "atwNumber": "ATW1234567895",
   "declarationVersion": 2.1,
-  "claimType": "TRAVEL_TO_WORK",
   "previousClaimId": 1, // Optional. This field links the previous claim to the claim that is being resubmitted for an employed employmentStatus
   "travelDetails": {
     "howDidYouTravelForWork": "lift", // Values: lift or taxi
@@ -354,6 +370,10 @@ Submit a claim to be saved in the mongo database
         {
           "dayOfTravel": "12",
           "totalTravel": "13" // Both fields are required. No optional fields as this is a TW specific field
+        },
+        {
+          "dayOfTravel": "13",
+          "totalTravel": "14"
         }
       ]
     },
@@ -369,14 +389,14 @@ Submit a claim to be saved in the mongo database
         }
       ]
     }
-  },
-  "evidence": [// Same as SW and EA
+  },  
+  "evidence": [ // no evidence if travelling via lift
     {
       "fileId": "583d32fb-4b1d-418b-a25b-d1a47feb095f/4a5d1bdf-7b60-402d-93bf-de3e7a369044",
       "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
     }
   ],
-  "payee": { // Same as SW and EA
+  "payee": { 
     "newPayee": true,
     "details": { // details must always be present
       "fullName": "INeed Paying",
@@ -389,10 +409,10 @@ Submit a claim to be saved in the mongo database
       "address4": "WHITLEY BAY", // Optional
       "postcode": "NE26 4RS"
     },
-    "bankDetails": {// if newPayee is set to false, bankDetails is not required
+    "bankDetails": {// if newPayee is set to false, bankDetails accountNumber is the only one required
       "accountHolderName": "Ineed Paying",
       "sortCode": "000004",
-      "accountNumber": "12345677"
+      "accountNumber": "12345677" //required
     }
   },
   "workplaceContact": {//This block is different for TW
@@ -445,10 +465,10 @@ Submit a claim to be saved in the mongo database
 #### Body (all fields are required)
 ```json5
 {
-    "nino": "CS700100A",
+    "claimType": "TRAVEL_IN_WORK",
+    "nino": "RN000013A",
     "atwNumber": "ATW1234567",
     "declarationVersion": 2.1,
-    "claimType": "TRAVEL_IN_WORK",
     "previousClaimId": 3,// Optional. This field links the previous claim to the claim that is being resubmitted for an employed employmentStatus
     "cost": 2211,
     "hasContributions": true,
@@ -501,13 +521,13 @@ Submit a claim to be saved in the mongo database
             ]
         }
     },
-    "evidence": [// Same as SW, TW, AV and EA
+    "evidence": [
       {
         "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
         "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
       }
     ],
-    "payee": { // Same as SW, TW, AV and EA
+    "payee": { 
         "newPayee": true,
         "details": { // details must always be present
             "fullName": "INeed Paying",
@@ -520,10 +540,10 @@ Submit a claim to be saved in the mongo database
             "address4": "WHITLEY BAY", // Optional
             "postcode": "NE26 4RS"
         },
-        "bankDetails": {// if newPayee is set to false, bankDetails is not required
+        "bankDetails": {// if newPayee is set to false, bankDetails accountNumber is the only one required
             "accountHolderName": "Ineed Paying",
             "sortCode": "000004",
-            "accountNumber": "12345677",
+            "accountNumber": "12345677", //required
             "rollNumber": "12345677"
         }
     },
@@ -634,7 +654,7 @@ Retrieve claim request for the claim reference (claim type and claim number)
 ```json5
 {
   "claimReference": "TW0001",
-  "nino": "AA370773A"
+  "nino": "RN000013A"
 }
 ```
 
@@ -644,24 +664,35 @@ Retrieve claim request for the claim reference (claim type and claim number)
 
 ```json5
 {
-  "id": 1,
-  "createdDate": "2022-01-18T16:31:03.297",
-  "lastModifiedDate": "2022-01-18T16:31:29.095",
+  "id": 4,
+  "createdDate": "2025-03-17T14:31:21.363",
+  "lastModifiedDate": "2025-03-17T14:31:30.486",
   "claimStatus": "COUNTER_SIGN_REJECTED",
-  "nino": "AA370773A",
-  "claimType": "TRAVEL_TO_WORK",
+  "nino": "RN000013A",
   "atwNumber": "ATW123456789",
+  "claimType": "TRAVEL_TO_WORK",
   "cost": 2211.0,
-  "evidence": [
-    {
-      "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
-      "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
-    }
-  ],
+  "hasContributions": true,
+  "claimant": {
+    "forename": "Odin",
+    "surname": "Surtsson",
+    "dateOfBirth": "1930-11-22",
+    "emailAddress": "Odin.Surtsson@gmail.com",
+    "homeNumber": "01200000000",
+    "mobileNumber": "07700000000",
+    "address": {
+      "address1": "1 The Street",
+      "address2": "Village Name",
+      "address3": "Town",
+      "address4": "County",
+      "postcode": "NE26 4RS"
+    },
+    "company": "Company 1"
+  },
   "payee": {
     "details": {
-      "fullName": "George Herbert",
-      "emailAddress": "name@name.com"
+      "fullName": "Ineed Paying",
+      "emailAddress": "payment@now.com"
     },
     "address": {
       "address1": "THE COTTAGE",
@@ -671,16 +702,41 @@ Retrieve claim request for the claim reference (claim type and claim number)
       "postcode": "NE26 4RS"
     },
     "bankDetails": {
-      "accountHolderName": "George Herbert",
+      "accountHolderName": "Ineed Paying",
       "sortCode": "000004",
       "accountNumber": "12345677",
       "rollNumber": "12345677"
-    }
+    },
+    "newPayee": true
   },
   "declarationVersion": 2.1,
+  "previousClaimId": 3,
+  "documentBatchRequestId": null,
+  "workplaceContact": {
+    "emailAddress": "Count@sign.com",
+    "fullName": "Count Signer",
+    "organisation": "company2",
+    "jobTitle": "boss2",
+    "address": {
+      "address1": "THE COTTAGE",
+      "address2": "ST. MARYS ISLAND",
+      "address3": "WHITLEY BAY",
+      "address4": "WHITLEY BAY",
+      "postcode": "NE26 4RS"
+    },
+    "reason": "nulla facilisi etiam dignissim",
+    "updatedOn": "2025-03-17T14:31:30.485",
+    "employmentStatus": "employed"
+  },
+  "evidence": [
+    {
+      "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
+      "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
+    }
+  ],
   "travelDetails": {
     "howDidYouTravelForWork": "taxi",
-    "journeysOrMiles": null
+    "journeysOrMileage": null
   },
   "claim": {
     "0": {
@@ -690,34 +746,11 @@ Retrieve claim request for the claim reference (claim type and claim number)
       },
       "claim": [
         {
-          "dayOfTravel": "12",
-          "totalTravel": "13"
+          "dayOfTravel": 12,
+          "totalTravel": 13.0
         }
       ]
     }
-  },
-  "workplaceContact": {
-    "emailAddress": "email@company.com",
-    "organisation": "company",
-    "jobTitle": "boss",
-    "reason": "nulla facilisi etiam dignissim",
-    "updatedOn": "2021-11-18T14:00:38.477"
-  },
-  "claimant": {
-    "forename": "Odin",
-    "surname": "Surtsson",
-    "dateOfBirth": "1930-11-22",
-    "emailAddress": "Odin.Surtsson@gmail.com",
-    "homeNumber": "01277777777",
-    "mobileNumber": "07700900630",
-    "company": "Company 1",
-    "address": {
-      "address1": "1 The Street",
-      "address2": "Village Name",
-      "address3": "Town",
-      "address4": "County",
-      "postcode": "NE26 4RS"
-    },
   },
   "journeyContext": { // This is the data as it is saved in Casa
     "data": {
@@ -748,23 +781,34 @@ Retrieve claim request for the claim reference (claim type and claim number)
 ```json5
 {
   "id": 1,
-  "createdDate": "2022-01-18T16:31:03.297",
-  "lastModifiedDate": "2022-01-18T16:31:29.095",
-  "atwNumber": "ATW123456789",
+  "createdDate": "2025-03-17T14:39:07.29",
+  "lastModifiedDate": "2025-03-17T14:39:07.29",
   "claimStatus": "AWAITING_COUNTER_SIGN",
-  "nino": "AA370773A",
+  "nino": "RN000013A",
+  "atwNumber": "ATW123456789",
   "claimType": "TRAVEL_TO_WORK",
   "cost": 2211.0,
-  "evidence": [
-    {
-      "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
-      "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
-    }
-  ],
+  "hasContributions": true,
+  "claimant": {
+    "forename": "Odin",
+    "surname": "Surtsson",
+    "dateOfBirth": "1930-11-22",
+    "emailAddress": "Odin.Surtsson@gmail.com",
+    "homeNumber": "01233665544",
+    "mobileNumber": "07700900630",
+    "address": {
+      "address1": "1 The Street",
+      "address2": "Village Name",
+      "address3": "Town",
+      "address4": "County",
+      "postcode": "NE26 4RS"
+    },
+    "company": "Company 1"
+  },
   "payee": {
     "details": {
-      "fullName": "George Herbert",
-      "emailAddress": "name@name.com"
+      "fullName": "Ineed Paying",
+      "emailAddress": "payment@now.com"
     },
     "address": {
       "address1": "THE COTTAGE",
@@ -774,16 +818,35 @@ Retrieve claim request for the claim reference (claim type and claim number)
       "postcode": "NE26 4RS"
     },
     "bankDetails": {
-      "accountHolderName": "George Herbert",
+      "accountHolderName": "Ineed Paying",
       "sortCode": "000004",
       "accountNumber": "12345677",
       "rollNumber": "12345677"
-    }
+    },
+    "newPayee": true
   },
   "declarationVersion": 2.1,
+  "workplaceContact": {
+    "emailAddress": "Count@sign.com",
+    "fullName": "Count Signer",
+    "address": {
+      "address1": "b & q Bridl",
+      "address2": "ST. MARYS ISLAND",
+      "address3": "WHITLEY BAY",
+      "address4": null,
+      "postcode": "NE26 4RS"
+    },
+    "employmentStatus": "employed"
+  },
+  "evidence": [
+    {
+      "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
+      "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
+    }
+  ],
   "travelDetails": {
     "howDidYouTravelForWork": "taxi",
-    "journeysOrMiles": null
+    "journeysOrMileage": null
   },
   "claim": {
     "0": {
@@ -793,36 +856,13 @@ Retrieve claim request for the claim reference (claim type and claim number)
       },
       "claim": [
         {
-          "dayOfTravel": "12",
-          "totalTravel": "13"
+          "dayOfTravel": 12,
+          "totalTravel": 13.0
         }
       ]
     }
   },
-  "workplaceContact": {
-    "emailAddress": "email@company.com",
-    "organisation": "company",
-    "jobTitle": "boss",
-    "reason": "nulla facilisi etiam dignissim",
-    "updatedOn": "2021-11-18T14:00:38.477"
-  },
-  "claimant": {
-    "forename": "Odin",
-    "surname": "Surtsson",
-    "dateOfBirth": "1930-11-22",
-    "emailAddress": "Odin.Surtsson@gmail.com",
-    "homeNumber": "01277777777",
-    "mobileNumber": "07700900630",
-    "company": "Company 1",
-    "address": {
-      "address1": "1 The Street",
-      "address2": "Village Name",
-      "address3": "Town",
-      "address4": "County",
-      "postcode": "NE26 4RS"
-    },
-  },
-  "journeyContext": { // This is the data as it is saved in Casa
+  "journeyContext": {
     "data": {
       "travel-cost": {
         "cost": 123.2
@@ -840,7 +880,8 @@ Retrieve all claims for the user (by Nino)
 
 ```json5
 {
-  "nino": "AA370773A"
+  "nino": "RN000013A",
+  "claimType": "TRAVEL_TO_WORK"
 }
 ```
 
@@ -851,24 +892,35 @@ Retrieve all claims for the user (by Nino)
 ```json5
 [
   {
-    "id": 11,
-    "createdDate": "2022-01-18T16:31:03.297",
-    "lastModifiedDate": "2022-01-18T16:31:29.095",
-    "atwNumber": "ATW123456789",
+    "id": 20,
+    "createdDate": "2025-03-17T14:39:07.29",
+    "lastModifiedDate": "2025-03-17T14:39:07.29",
     "claimStatus": "AWAITING_COUNTER_SIGN",
-    "nino": "AA370773A",
+    "nino": "RN000013A",
+    "atwNumber": "ATW123456789",
     "claimType": "TRAVEL_TO_WORK",
     "cost": 2211.0,
-    "evidence": [
-      {
-        "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
-        "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
-      }
-    ],
+    "hasContributions": true,
+    "claimant": {
+      "forename": "Odin",
+      "surname": "Surtsson",
+      "dateOfBirth": "1930-11-22",
+      "emailAddress": "Odin.Surtsson@gmail.com",
+      "homeNumber": "01200000000",
+      "mobileNumber": "07700000000",
+      "address": {
+        "address1": "1 The Street",
+        "address2": "Village Name",
+        "address3": "Town",
+        "address4": "County",
+        "postcode": "NE26 4RS"
+      },
+      "company": "Company 1"
+    },
     "payee": {
       "details": {
-        "fullName": "George Herbert",
-        "emailAddress": "name@name.com"
+        "fullName": "Ineed Paying",
+        "emailAddress": "payment@now.com"
       },
       "address": {
         "address1": "THE COTTAGE",
@@ -878,16 +930,37 @@ Retrieve all claims for the user (by Nino)
         "postcode": "NE26 4RS"
       },
       "bankDetails": {
-        "accountHolderName": "George Herbert",
+        "accountHolderName": "Ineed Paying",
         "sortCode": "000004",
         "accountNumber": "12345677",
         "rollNumber": "12345677"
-      }
+      },
+      "newPayee": true
     },
     "declarationVersion": 2.1,
+    "previousClaimId": 3,
+    "documentBatchRequestId": null,
+    "workplaceContact": {
+      "emailAddress": "Count@sign.com",
+      "fullName": "Count Signer",
+      "address": {
+        "address1": "b & q Bridl",
+        "address2": "ST. MARYS ISLAND",
+        "address3": "WHITLEY BAY",
+        "address4": null,
+        "postcode": "NE26 4RS"
+      },
+      "employmentStatus": "employed"
+    },
+    "evidence": [
+      {
+        "fileId": "633ce73b-1414-433e-8a08-72449a0244fc/144b2aca-996d-4c27-bdf2-1e9b418874d3",
+        "fileName": "6b99f480c27e246fa5dd0453cd4fba29.pdf"
+      }
+    ],
     "travelDetails": {
       "howDidYouTravelForWork": "taxi",
-      "journeysOrMiles": null
+      "journeysOrMileage": null
     },
     "claim": {
       "0": {
@@ -897,36 +970,13 @@ Retrieve all claims for the user (by Nino)
         },
         "claim": [
           {
-            "dayOfTravel": "12",
-            "totalTravel": "13"
+            "dayOfTravel": 12,
+            "totalTravel": 13.0
           }
         ]
       }
     },
-    "workplaceContact": {
-      "emailAddress": "email@company.com",
-      "organisation": "company",
-      "jobTitle": "boss",
-      "reason": "nulla facilisi etiam dignissim",
-      "updatedOn": "2021-11-18T14:00:38.477"
-    },
-    "claimant": {
-      "forename": "Odin",
-      "surname": "Surtsson",
-      "dateOfBirth": "1930-11-22",
-      "emailAddress": "Odin.Surtsson@gmail.com",
-      "homeNumber": "01277777777",
-      "mobileNumber": "07700900630",
-      "company": "Company 1",
-      "address": {
-        "address1": "1 The Street",
-        "address2": "Village Name",
-        "address3": "Town",
-        "address4": "County",
-        "postcode": "NE26 4RS"
-      }
-    },
-    "journeyContext": { // This is the data as it is saved in Casa
+    "journeyContext": {
       "data": {
         "travel-cost": {
           "cost": 123.2
@@ -983,7 +1033,7 @@ Update the workplace details before the submitted claim is accepted or reject by
 
 ```json5
 {
-  "nino": "AA370773A",
+  "nino": "RN000013A",
   "claimReference": "TW6",
   "workplaceContact" :
   {
@@ -1006,7 +1056,7 @@ Update contact information which is saved in the mongo database
 ```json5
 {
   "accessToWorkNumber": "ATW12006521",
-  "nino": "AA370773A",
+  "nino": "RN000013A",
   "declarationVersion" : 2.3,
   "currentContactInformation" : {
     "forename": "Martha", //optional
@@ -1049,7 +1099,7 @@ Update contact information which is saved in the mongo database
   "contactInformationStatus": "AWAITING_UPLOAD",
   "createdDate": "2022-02-25T16:40:59.492887",
   "accessToWorkNumber": "ATW12006521",
-  "nino": "AA370773A",
+  "nino": "RN000013A",
   "declarationVersion": 2.3,
   "currentContactInformation": {
     "forename": "Martha",
@@ -1102,7 +1152,7 @@ Retrieve contact information from the mongo database. The contactInformationStat
   "contactInformationStatus": "AWAITING_UPLOAD",
   "createdDate": "2022-03-24T16:41:00.628",
   "accessToWorkNumber": "ATW12006521",
-  "nino": "AA370773A",
+  "nino": "RN000013A",
   "declarationVersion": 2.3,
   "currentContactInformation": {
     "forename": "Martha",
@@ -1170,7 +1220,7 @@ End point to get the count of rejected claims
 
 ```json5
 {
-  "nino": "AA370773A"
+  "nino": "RN000013A"
 }
 ```
 #### Response
@@ -1186,7 +1236,7 @@ End point to get the count of rejected claims per claimtype
 
 ```json5
 {
-  "nino": "AA370773A"
+  "nino": "RN000013A"
 }
 ```
 #### Response

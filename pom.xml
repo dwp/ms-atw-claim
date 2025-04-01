@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>uk.gov.dwp.health.atw</groupId>
 	<artifactId>ms-claim</artifactId>
-	<version>1.25.0</version>
+	<version>1.26.0</version>
 	<name>ms-claim</name>
 	<description>Claim service for AtW</description>
 	<properties>
@@ -34,11 +34,9 @@
 		<sonar.coverage.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.coverage.exclusions>
 		<jackson-databind.version>2.18.2</jackson-databind.version>
 		<annotations.version>3.0.1u2</annotations.version>
-		<logback.version>1.5.15</logback.version> <!-- To fix CVE-2024-12798 and CVE-2024-12801 -->
 		<netty-handler.version>4.1.118.Final</netty-handler.version> <!-- To fix CVE-2024-24970 -->
 		<netty-common.version>4.1.118.Final</netty-common.version> <!-- To fix CVE-2024-25193 -->
 		<netty-all.version>4.1.118.Final</netty-all.version> <!-- To fix CVE-2024-24970 and CVE-2024-25193 -->
-		<json-smart.version>2.5.2</json-smart.version> <!-- To fix CVE-2024-57699 -->
 	</properties>
 	<dependencies>
 		<dependency>

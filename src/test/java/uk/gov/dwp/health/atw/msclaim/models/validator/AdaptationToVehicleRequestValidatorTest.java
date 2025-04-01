@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.invalidAdaptationToVehicleMissingCostSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleSubmitRequest;
-import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleWithNoAddressOrBankDetailsForPayeeRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.AdaptationToVehicleTestData.validAdaptationToVehicleWithNoAddressAndBankDetailsForExistingPayeeRequest;
 
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.DisplayName;
@@ -32,9 +32,10 @@ class AdaptationToVehicleRequestValidatorTest {
   }
 
   @Test
-  @DisplayName("Adaptation To Vehicle with new payee value set to false and no address or bank details for the payee")
+  @DisplayName("Adaptation To Vehicle with new payee value set to false and no address And bank details for the existing payee")
   void isValid_equipmentOrAdaptationsWithNewPayeeFalse() {
-    assertFalse(adaptationToVehicleRequestValidator.isValid(validAdaptationToVehicleWithNoAddressOrBankDetailsForPayeeRequest, constraintValidatorContext));
+    assertFalse(adaptationToVehicleRequestValidator.isValid(
+        validAdaptationToVehicleWithNoAddressAndBankDetailsForExistingPayeeRequest, constraintValidatorContext));
   }
 
   @Test

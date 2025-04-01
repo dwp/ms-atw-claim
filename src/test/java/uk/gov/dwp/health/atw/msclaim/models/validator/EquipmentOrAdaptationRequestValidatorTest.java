@@ -30,9 +30,10 @@ class EquipmentOrAdaptationRequestValidatorTest {
     }
 
     @Test
-    @DisplayName("equipment Or Adaptations with new payee value set to false and no address or bank details for the payee")
+    @DisplayName("equipment Or Adaptations with new payee value set to false and no address and bank details for the existing payee")
     void isValid_equipmentOrAdaptationsWithNewPayeeFalse() {
-        assertFalse(equipmentOrAdaptationRequestValidator.isValid(validEquipmentOrAdaptationWithNoAddressOrBankDetailsForPayeeRequest, constraintValidatorContext));
+        assertFalse(equipmentOrAdaptationRequestValidator.isValid(
+            validEquipmentOrAdaptationWithNoAddressAndBankDetailsForExistingPayeeRequest, constraintValidatorContext));
     }
 
     @Test

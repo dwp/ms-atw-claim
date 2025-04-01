@@ -186,6 +186,20 @@ public class TestData {
       .accountNumber("12345677")
       .build();
 
+  public static final BankDetails bankDetailsMissingSortCode = BankDetails.builder()
+      .accountHolderName("Citizen One")
+      .accountNumber("12345677")
+      .build();
+
+  public static final BankDetails bankDetailsMissingAccountHolderName = BankDetails.builder()
+      .sortCode("000004")
+      .accountNumber("12345677")
+      .build();
+
+  public static final BankDetails bankDetailsForExistingPayee = BankDetails.builder()
+      .accountNumber("12345677")
+      .build();
+
   public static final Payee newPayee = Payee.builder()
       .newPayee(true)
       .details(fullPayeeDetails)
@@ -206,28 +220,25 @@ public class TestData {
       .bankDetails(bankDetails)
       .build();
 
-  public static final Payee newPayeeWithMissingBankDetails = Payee.builder()
+  public static final Payee newPayeeWithMissingAccountHolderForBankDetails = Payee.builder()
       .newPayee(true)
       .details(payeeDetailsWithoutEmailAddress)
       .address(address)
+      .bankDetails(bankDetailsMissingAccountHolderName)
+      .build();
+
+  public static final Payee newPayeeWithMissingSortCodeForBankDetails = Payee.builder()
+      .newPayee(true)
+      .details(payeeDetailsWithoutEmailAddress)
+      .address(address)
+      .bankDetails(bankDetailsMissingSortCode)
       .build();
 
   public static final Payee
-      newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress = Payee.builder()
+      newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress = Payee.builder()
       .newPayee(false)
       .details(payeeDetailsWithoutEmailAddress)
-      .build();
-
-  public static final Payee newPayeeSetToFalseWithDetailsAndAddress = Payee.builder()
-      .newPayee(false)
-      .details(payeeDetailsWithoutEmailAddress)
-      .address(address)
-      .build();
-
-  public static final Payee newPayeeSetToFalseWithDetailsAndBankDetails = Payee.builder()
-      .newPayee(false)
-      .details(payeeDetailsWithoutEmailAddress)
-      .bankDetails(bankDetails)
+      .bankDetails(bankDetailsForExistingPayee)
       .build();
 
   public static final Claimant claimant = Claimant.builder()

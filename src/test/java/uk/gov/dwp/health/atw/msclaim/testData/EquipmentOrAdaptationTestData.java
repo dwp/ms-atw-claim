@@ -10,7 +10,7 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.claimant;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.equipmentOrAdaptation;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.evidences;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
-import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
 
 import java.util.Collections;
@@ -44,7 +44,7 @@ public class EquipmentOrAdaptationTestData {
           .build();
 
   public static final EquipmentOrAdaptationClaimRequest
-      validEquipmentOrAdaptationWithNoAddressOrBankDetailsForPayeeRequest =
+      validEquipmentOrAdaptationWithNoAddressAndBankDetailsForExistingPayeeRequest =
       EquipmentOrAdaptationClaimRequest.builder()
           .nino(NINO)
           .claimType(ClaimType.EQUIPMENT_OR_ADAPTATION)
@@ -53,7 +53,7 @@ public class EquipmentOrAdaptationTestData {
           .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .evidence(evidences)
-          .payee(newPayeeSetToFalseWithNoAddressOrBankDetailsAndPayeeDetailsWithNoEmailAddress)
+          .payee(newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress)
           .claim(Map.of("0", singletonList(equipmentOrAdaptation)))
           .journeyContext(Collections.emptyMap())
           .declarationVersion(DECLARATION_VERSION)
