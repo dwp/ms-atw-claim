@@ -17,9 +17,13 @@ import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submi
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForOneMonthWithoutNameOfSupportRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimForTwoMonthsRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimRequestWithNameOfSupportOnSupportWorkerClaim;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimWithExistingPayee;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.submittedSupportWorkerClaimWithExistingPayeeOldDataModel;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequestWithNameOfSupportOnSupportWorkerClaim;
 import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimRequestWithoutNameOfSupport;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimWithExistingPayeeOldDataModelRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.SupportWorkerTestData.validSupportWorkerClaimWithExistingPayeeRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.resubmitedValidClaimNumber;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumber;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumberDoubleDigits;
@@ -53,6 +57,42 @@ class SupportWorkerSubmissionStrategyTest {
     ClaimRequest spyValidSupportWorkerClaim = spy(validSupportWorkerClaimRequest);
 
     when(claimService.validateAndSaveActiveClaim(any(ClaimRequest.class), anyLong())).thenReturn(submittedSupportWorkerClaimForOneMonthRequest);
+
+    assertThat(supportWorkerSubmissionStrategy.submit(spyValidSupportWorkerClaim,
+        validClaimNumber), samePropertyValuesAs(claimResponseSw));
+
+    verify(spyValidSupportWorkerClaim, times(1)).setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+    verify(claimService, times(1)).handlePreviousClaim(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Support Worker claim with existing payee")
+  void saveClaimWithSupportWorkerWithAnExistingPayee() {
+
+    ClaimRequest spyValidSupportWorkerClaim = spy(validSupportWorkerClaimWithExistingPayeeRequest);
+
+    when(claimService.validateAndSaveActiveClaim(any(ClaimRequest.class), anyLong())).thenReturn(submittedSupportWorkerClaimWithExistingPayee);
+
+    assertThat(supportWorkerSubmissionStrategy.submit(spyValidSupportWorkerClaim,
+        validClaimNumber), samePropertyValuesAs(claimResponseSw));
+
+
+
+    verify(spyValidSupportWorkerClaim, times(1)).setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+    verify(claimService, times(1)).handlePreviousClaim(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Support Worker claim with existing payee old data model")
+  void saveClaimWithSupportWorkerWithAnExistingPayeeOldDataModel() {
+
+    ClaimRequest spyValidSupportWorkerClaim = spy(validSupportWorkerClaimWithExistingPayeeOldDataModelRequest);
+
+    when(claimService.validateAndSaveActiveClaim(any(ClaimRequest.class), anyLong())).thenReturn(submittedSupportWorkerClaimWithExistingPayeeOldDataModel);
 
     assertThat(supportWorkerSubmissionStrategy.submit(spyValidSupportWorkerClaim,
         validClaimNumber), samePropertyValuesAs(claimResponseSw));

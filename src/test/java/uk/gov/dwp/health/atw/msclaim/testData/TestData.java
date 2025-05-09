@@ -241,6 +241,11 @@ public class TestData {
       .bankDetails(bankDetailsForExistingPayee)
       .build();
 
+  public static final Payee newPayeeForExistingPayeeOldDataModel = Payee.builder()
+      .newPayee(false)
+      .details(fullPayeeDetails)
+      .build();
+
   public static final Claimant claimant = Claimant.builder()
       .dateOfBirth(DATE_OF_BIRTH)
       .surname(SURNAME)

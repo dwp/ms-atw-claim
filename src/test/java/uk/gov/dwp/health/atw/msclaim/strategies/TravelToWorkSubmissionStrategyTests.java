@@ -11,9 +11,13 @@ import static org.mockito.Mockito.when;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.claimResponseTtw;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftForTwoMonthsTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftTravelToWorkClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftTravelToWorkWithExistingPayeeClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedLiftTravelToWorkWithExistingPayeeClaimRequestOldDataModel;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.submittedTaxiTravelToWorkClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftForTwoMonthsTravelToWorkSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftTravelToWorkSubmitRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftTravelToWorkWithExistingPayeeSubmitRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validLiftTravelToWorkWithExistingPayeeSubmitRequestOldDataModel;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validTaxiTravelToWorkSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelToWorkTestData.validTravelToWorkClaim;
 
@@ -48,6 +52,46 @@ class TravelToWorkSubmissionStrategyTests {
             .thenReturn(submittedLiftTravelToWorkClaimRequest);
 
     ClaimRequest spyValidTravelToWorkClaim = spy(validLiftTravelToWorkSubmitRequest);
+
+    assertThat(travelToWorkSubmissionStrategy.submit(spyValidTravelToWorkClaim,
+            validTravelToWorkClaim.getId()), samePropertyValuesAs(claimResponseTtw));
+
+    verify(spyValidTravelToWorkClaim, times(1))
+            .setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+
+    verify(claimService, never()).uploadClaimToDocumentBatch(any(String.class), any(String.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Travel To Work claim with existing payee with existing payee and employed employment status successfully")
+  void saveClaimWithTravelToWorkClaimTypeWithExistingPayeeAndEmployedEmploymentStatus() {
+    when(claimService.validateAndSaveActiveClaim(any(TravelToWorkClaimRequest.class),
+            any(long.class)))
+            .thenReturn(submittedLiftTravelToWorkWithExistingPayeeClaimRequest);
+
+    ClaimRequest spyValidTravelToWorkClaim = spy(validLiftTravelToWorkWithExistingPayeeSubmitRequest);
+
+    assertThat(travelToWorkSubmissionStrategy.submit(spyValidTravelToWorkClaim,
+            validTravelToWorkClaim.getId()), samePropertyValuesAs(claimResponseTtw));
+
+    verify(spyValidTravelToWorkClaim, times(1))
+            .setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+
+    verify(claimService, never()).uploadClaimToDocumentBatch(any(String.class), any(String.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Travel To Work claim with existing payee with existing payee old data model")
+  void saveClaimWithTravelToWorkClaimTypeWithExistingPayeeOldDataModel() {
+    when(claimService.validateAndSaveActiveClaim(any(TravelToWorkClaimRequest.class),
+            any(long.class)))
+            .thenReturn(submittedLiftTravelToWorkWithExistingPayeeClaimRequestOldDataModel);
+
+    ClaimRequest spyValidTravelToWorkClaim = spy(validLiftTravelToWorkWithExistingPayeeSubmitRequestOldDataModel);
 
     assertThat(travelToWorkSubmissionStrategy.submit(spyValidTravelToWorkClaim,
             validTravelToWorkClaim.getId()), samePropertyValuesAs(claimResponseTtw));

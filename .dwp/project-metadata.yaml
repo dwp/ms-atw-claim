@@ -6,10 +6,10 @@ project:
   - project_id: 28555026
     component_name: ms-claim
 
-    version: 1.26.0
+    version: 1.27.0
 
     last_verified:
-      date: "2025-03-25"
+      date: "2025-04-30"
       name: "@louise.oliver1"
 
     tags:

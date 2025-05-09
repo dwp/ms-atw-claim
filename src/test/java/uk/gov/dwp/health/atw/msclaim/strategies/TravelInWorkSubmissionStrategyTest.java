@@ -12,9 +12,13 @@ import static org.mockito.Mockito.when;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.claimResponseTiw;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedForTwoMonthsTravelInWorkEmployedClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedTravelInWorkEmployedClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedTravelInWorkEmployedWithExistingPayeeClaimRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedTravelInWorkEmployedWithExistingPayeeClaimRequestOldDataModel;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.submittedTravelInWorkSelfEmployedClaimRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validForTwoMonthsTravelInWorkEmployedSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkEmployedSubmitRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkEmployedWithExistingPayeeSubmitRequest;
+import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkEmployedWithExistingPayeeSubmitRequestOldDataModel;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkSubmitRequest;
 import static uk.gov.dwp.health.atw.msclaim.testData.TravelInWorkTestData.validTravelInWorkClaim;
 
@@ -49,6 +53,46 @@ class TravelInWorkSubmissionStrategyTest {
         .thenReturn(submittedTravelInWorkEmployedClaimRequest);
 
     ClaimRequest spyValidTravelInWorkClaim = spy(validTravelInWorkEmployedSubmitRequest);
+
+    assertThat(travelInWorkSubmissionStrategy.submit(spyValidTravelInWorkClaim,
+        validTravelInWorkClaim.getId()), samePropertyValuesAs(claimResponseTiw));
+
+    verify(spyValidTravelInWorkClaim, times(1))
+        .setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+
+    verify(claimService, never()).uploadClaimToDocumentBatch(any(String.class), any(String.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Travel In Work claim with existing payee")
+  void saveClaimWithTravelInWorkClaimWithExistingPayee() {
+    when(claimService.validateAndSaveActiveClaim(any(TravelInWorkClaimRequest.class),
+        any(long.class)))
+        .thenReturn(submittedTravelInWorkEmployedWithExistingPayeeClaimRequest);
+
+    ClaimRequest spyValidTravelInWorkClaim = spy(validTravelInWorkEmployedWithExistingPayeeSubmitRequest);
+
+    assertThat(travelInWorkSubmissionStrategy.submit(spyValidTravelInWorkClaim,
+        validTravelInWorkClaim.getId()), samePropertyValuesAs(claimResponseTiw));
+
+    verify(spyValidTravelInWorkClaim, times(1))
+        .setClaimStatus(ClaimStatus.AWAITING_COUNTER_SIGN);
+
+    verify(claimService, never()).uploadClaimToDocumentBatch(any(String.class), any(String.class));
+    verify(emailNotificationService, times(1)).notifyWorkplaceContactOfClaimToReview(any(ClaimRequest.class));
+    verify(emailNotificationService, times(1)).notifyClaimantThatRequestHasBeenSentToWorkplaceContact(any(ClaimRequest.class));
+  }
+
+  @Test
+  @DisplayName("submit Travel In Work claim with existing payee old data model")
+  void saveClaimWithTravelInWorkClaimWithExistingPayeeOldDataModel() {
+    when(claimService.validateAndSaveActiveClaim(any(TravelInWorkClaimRequest.class),
+        any(long.class)))
+        .thenReturn(submittedTravelInWorkEmployedWithExistingPayeeClaimRequestOldDataModel);
+
+    ClaimRequest spyValidTravelInWorkClaim = spy(validTravelInWorkEmployedWithExistingPayeeSubmitRequestOldDataModel);
 
     assertThat(travelInWorkSubmissionStrategy.submit(spyValidTravelInWorkClaim,
         validTravelInWorkClaim.getId()), samePropertyValuesAs(claimResponseTiw));

@@ -3,6 +3,8 @@ package uk.gov.dwp.health.atw.msclaim.testData;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeForExistingPayeeOldDataModel;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.resubmitedValidClaimNumber;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.validClaimNumberDoubleDigits;
 import static uk.gov.dwp.health.atw.msclaim.testData.WorkplaceContactTestData.acceptedWorkplaceContactResponse;
@@ -85,6 +87,40 @@ public class SupportWorkerTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
+          .nameOfSupport("Person 3")
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(emailAndFullNameWorkplaceContact)
+          .build();
+
+  public static final SupportWorkerClaimRequest validSupportWorkerClaimWithExistingPayeeRequest =
+      SupportWorkerClaimRequest.builder()
+          .nino(NINO)
+          .claimType(ClaimType.SUPPORT_WORKER)
+          .cost(COST)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .evidence(evidences)
+          .payee(newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress)
+          .nameOfSupport("Person 3")
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(emailAndFullNameWorkplaceContact)
+          .build();
+
+  public static final SupportWorkerClaimRequest validSupportWorkerClaimWithExistingPayeeOldDataModelRequest =
+      SupportWorkerClaimRequest.builder()
+          .nino(NINO)
+          .claimType(ClaimType.SUPPORT_WORKER)
+          .cost(COST)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .evidence(evidences)
+          .payee(newPayeeForExistingPayeeOldDataModel)
           .nameOfSupport("Person 3")
           .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
           .declarationVersion(DECLARATION_VERSION)
@@ -222,6 +258,44 @@ public class SupportWorkerTestData {
           .claimant(claimant)
           .evidence(evidences)
           .payee(newPayee)
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .nameOfSupport("Person 3")
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(emailAndFullNameWorkplaceContact)
+          .build();
+
+  public static final SupportWorkerClaimRequest submittedSupportWorkerClaimWithExistingPayee =
+      SupportWorkerClaimRequest.builder()
+          .id(validClaimNumber)
+          .nino(NINO)
+          .claimType(ClaimType.SUPPORT_WORKER)
+          .cost(COST)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .evidence(evidences)
+          .payee(newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress)
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .nameOfSupport("Person 3")
+          .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(emailAndFullNameWorkplaceContact)
+          .build();
+
+  public static final SupportWorkerClaimRequest submittedSupportWorkerClaimWithExistingPayeeOldDataModel =
+      SupportWorkerClaimRequest.builder()
+          .id(validClaimNumber)
+          .nino(NINO)
+          .claimType(ClaimType.SUPPORT_WORKER)
+          .cost(COST)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .evidence(evidences)
+          .payee(newPayeeForExistingPayeeOldDataModel)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .nameOfSupport("Person 3")
           .claim(singletonMap("0", supportWorkerClaimForOneMonthWithTwoDaysOfSupport))

@@ -13,6 +13,8 @@ import static uk.gov.dwp.health.atw.msclaim.testData.TestData.invalidJourneyOrMi
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.invalidTravelDetailsForTaxi;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.invalidWayToTravelToWork;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayee;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeForExistingPayeeOldDataModel;
+import static uk.gov.dwp.health.atw.msclaim.testData.TestData.newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelDetailsForLiftWithMiles;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelDetailsForTaxi;
 import static uk.gov.dwp.health.atw.msclaim.testData.TestData.travelToWorkClaimForOneMonth;
@@ -124,6 +126,42 @@ public class TravelToWorkTestData {
           .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .payee(validTravelToWorkClaim.getPayee())
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .travelDetails(travelDetailsForLiftWithMiles)
+          .claim(singletonMap("0", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(travelToWorkEmployedWorkplaceContact)
+          .build();
+
+  public static final TravelToWorkClaimRequest submittedLiftTravelToWorkWithExistingPayeeClaimRequest =
+      TravelToWorkClaimRequest.builder()
+          .id(validTravelToWorkClaim.getId())
+          .nino(validTravelToWorkClaim.getNino())
+          .claimType(ClaimType.TRAVEL_TO_WORK)
+          .cost(validTravelToWorkClaim.getCost())
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .payee(newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress)
+          .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
+          .travelDetails(travelDetailsForLiftWithMiles)
+          .claim(singletonMap("0", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(travelToWorkEmployedWorkplaceContact)
+          .build();
+
+  public static final TravelToWorkClaimRequest submittedLiftTravelToWorkWithExistingPayeeClaimRequestOldDataModel =
+      TravelToWorkClaimRequest.builder()
+          .id(validTravelToWorkClaim.getId())
+          .nino(validTravelToWorkClaim.getNino())
+          .claimType(ClaimType.TRAVEL_TO_WORK)
+          .cost(validTravelToWorkClaim.getCost())
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .payee(newPayeeForExistingPayeeOldDataModel)
           .claimStatus(ClaimStatus.AWAITING_COUNTER_SIGN)
           .travelDetails(travelDetailsForLiftWithMiles)
           .claim(singletonMap("0", travelToWorkClaimForOneMonth))
@@ -324,6 +362,36 @@ public class TravelToWorkTestData {
           .atwNumber(ATW_NUMBER)
           .claimant(claimant)
           .payee(validTravelToWorkClaim.getPayee())
+          .travelDetails(travelDetailsForLiftWithMiles)
+          .claim(singletonMap("0", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(travelToWorkEmployedWorkplaceContact)
+          .build();
+
+  public static final TravelToWorkClaimRequest validLiftTravelToWorkWithExistingPayeeSubmitRequest =
+      TravelToWorkClaimRequest.builder()
+          .nino(validTravelToWorkClaim.getNino())
+          .claimType(ClaimType.TRAVEL_TO_WORK)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .payee(newPayeeSetToFalseWithNoAddressBankDetailsWithAccountNumberAndPayeeDetailsWithNoEmailAddress)
+          .travelDetails(travelDetailsForLiftWithMiles)
+          .claim(singletonMap("0", travelToWorkClaimForOneMonth))
+          .declarationVersion(DECLARATION_VERSION)
+          .journeyContext(Collections.emptyMap())
+          .workplaceContact(travelToWorkEmployedWorkplaceContact)
+          .build();
+
+  public static final TravelToWorkClaimRequest validLiftTravelToWorkWithExistingPayeeSubmitRequestOldDataModel =
+      TravelToWorkClaimRequest.builder()
+          .nino(validTravelToWorkClaim.getNino())
+          .claimType(ClaimType.TRAVEL_TO_WORK)
+          .hasContributions(true)
+          .atwNumber(ATW_NUMBER)
+          .claimant(claimant)
+          .payee(newPayeeForExistingPayeeOldDataModel)
           .travelDetails(travelDetailsForLiftWithMiles)
           .claim(singletonMap("0", travelToWorkClaimForOneMonth))
           .declarationVersion(DECLARATION_VERSION)

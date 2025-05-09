@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.27.0 (2025-04-30)
+* Updating dependencies
+* Updated distroless version
+* Updated mongo docker version
+* Adding unit tests for existing payees data model
+
 # 1.26.0 (2025-03-25)
 * Updating dependencies
 * Updated distroless version
