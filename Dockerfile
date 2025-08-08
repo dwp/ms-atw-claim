@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java17@sha256:f5aebb97006043234d341e3c7eacb063b0abefb86a51a238c07a38ac6f298dd9
+FROM gcr.io/distroless/java17@sha256:9b1aa317005a34963fd85dcd4a2cf2484ad350198688faad89e6919a8ba4f2d2
 
 USER nonroot
 

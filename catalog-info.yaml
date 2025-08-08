@@ -1,0 +1,54 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+
+metadata:
+  name: atw-ms-claim
+  title: "atw/ms-claim"
+  description: |
+    A Java Springboot service within Access to Work (AtW) that will facilitate and manage to submission of claims within
+    AtW
+
+  annotations:
+    gitlab.com/project-slug: dwp/health/atw/components/ms-claim
+
+  labels:
+    dwp.gov.uk/version: 1.28.0
+    dwp.gov.uk/license: ISC
+
+    dwp.gov.uk/last-verified.by: jess.murphy1
+    dwp.gov.uk/last-verified.on: 2025-08-06
+
+    dwp.gov.uk/open-source.approved: true
+    dwp.gov.uk/open-source.location: https://github.com/dwp/ms-atw-claim
+
+    dwp.gov.uk/impacts.audit: true
+    dwp.gov.uk/impacts.authentication: false
+    dwp.gov.uk/impacts.authorisation: false
+    dwp.gov.uk/impacts.access-control: false
+    dwp.gov.uk/impacts.encryption: true
+    dwp.gov.uk/impacts.decryption: false
+    dwp.gov.uk/impacts.payments: false
+    dwp.gov.uk/impacts.personally-identifying-information: true
+
+  tags:
+    - bash
+    - docker
+    - java
+    - properties
+    - xml
+    - yaml
+
+  links:
+    - icon: externalLink
+      title: Repository
+      url: https://gitlab.com/dwp/health/atw/components/ms-claim
+    - icon: docs
+      title: Change Log
+      url: https://gitlab.com/dwp/health/atw/components/ms-claim/-/blob/develop/CHANGELOG.md
+
+spec:
+  owner: group:default/backstage.group.health-and-disability
+  system: system:default/6f5de9ec6f20cb80a16b7e952e3ee41e
+  lifecycle: production
+  type: service

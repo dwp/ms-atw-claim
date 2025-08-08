@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.28.0 (2025-08-06)
+* Updating dependencies
+* Updated distroless version
+* Updated mongo docker version
+
 # 1.27.0 (2025-04-30)
 * Updating dependencies
 * Updated distroless version

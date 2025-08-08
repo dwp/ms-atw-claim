@@ -5,39 +5,36 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>uk.gov.dwp.health.atw</groupId>
 	<artifactId>ms-claim</artifactId>
-	<version>1.27.0</version>
+	<version>1.28.0</version>
 	<name>ms-claim</name>
 	<description>Claim service for AtW</description>
 	<properties>
 		<java.version>17</java.version>
-		<plugin.spotbugs.maven.version>4.8.6.6</plugin.spotbugs.maven.version>
-		<plugin.spotbugs.version>4.8.6</plugin.spotbugs.version>
+		<plugin.spotbugs.maven.version>4.9.1.0</plugin.spotbugs.maven.version>
+		<plugin.spotbugs.version>4.9.1</plugin.spotbugs.version>
 		<checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
-		<checkstyle.version>10.23.0</checkstyle.version>
+		<checkstyle.version>10.26.1</checkstyle.version>
 		<plugin.jacoco.version>0.8.13</plugin.jacoco.version>
 		<plugin.surefire.version>3.5.3</plugin.surefire.version>
-		<pitest.version>1.19.1</pitest.version>
-		<pitest-plugin.version>1.2.2</pitest-plugin.version>
-		<aws.version>1.12.782</aws.version>
-		<spring-data-mongodb.version>4.4.5</spring-data-mongodb.version>
+		<pitest.version>1.20.1</pitest.version>
+		<pitest-plugin.version>1.2.3</pitest-plugin.version>
+		<aws.version>1.12.788</aws.version>
+		<spring-data-mongodb.version>4.5.2</spring-data-mongodb.version>
 		<maven-project-info-reports-plugin.version>3.9.0</maven-project-info-reports-plugin.version>
 		<maven-site-plugin.version>3.21.0</maven-site-plugin.version>
 		<dwp.encoded-log.version>3.0.0-dfda47f2</dwp.encoded-log.version>
 		<dwp.message-broker.version>3.10.0-253f3e8b</dwp.message-broker.version>
-		<owasp.version>12.1.1</owasp.version>
+		<owasp.version>12.1.3</owasp.version>
 		<sonar.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.exclusions>
 		<sonar.coverage.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.coverage.exclusions>
-		<jackson-databind.version>2.18.3</jackson-databind.version>
+		<jackson-databind.version>2.19.2</jackson-databind.version>
 		<annotations.version>3.0.1u2</annotations.version>
-		<netty-handler.version>4.2.0.Final</netty-handler.version> <!-- To fix CVE-2024-24970 -->
-		<netty-common.version>4.2.0.Final</netty-common.version> <!-- To fix CVE-2024-25193 -->
-		<netty-all.version>4.2.0.Final</netty-all.version> <!-- To fix CVE-2024-24970 and CVE-2024-25193 -->
-	</properties>
+    </properties>
 	<dependencies>
 		<dependency>
 			<groupId>net.minidev</groupId>
@@ -151,31 +148,6 @@
 				<version>${aws.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-all</artifactId>
-				<version>${netty-all.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>io.netty</groupId>
-						<artifactId>netty-handler</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>io.netty</groupId>
-						<artifactId>netty-common</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-handler</artifactId>
-				<version>${netty-handler.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-common</artifactId>
-				<version>${netty-common.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -336,7 +308,7 @@
 			<plugin>
 				<artifactId>dependency-check-maven</artifactId>
 				<configuration>
-					<cveValidForHours>12</cveValidForHours>
+					<nvdValidForHours>12</nvdValidForHours>
 					<failBuildOnCVSS>4</failBuildOnCVSS>
 					<suppressionFile>src/test/resources/DependencySuppression.xml</suppressionFile>
 				</configuration>

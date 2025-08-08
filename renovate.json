@@ -1,5 +1,17 @@
 {
   "extends": [
     "local>dwp/secure-development/renovate-bot//shared-configs/dwp-health-configuration-override"
+  ],
+  "packageRules": [
+    {
+      "description": "Disable broken spotbugs-maven-plugin version",
+      "matchPackageNames": ["com.github.spotbugs:spotbugs-maven-plugin", "com.github.spotbugs:spotbugs"],
+      "allowedVersions": "!/4.9.[3,2].*/"
+    },
+    {
+      "description": "Disable broken spotbugs version",
+      "matchPackageNames": ["com.github.spotbugs:spotbugs"],
+      "allowedVersions": "!/4.9.[3,2]/"
+    }
   ]
 }
