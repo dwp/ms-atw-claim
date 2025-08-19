@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.29.0 (2025-08-15)
+* Updating dependencies
+* Updated distroless version
+* Updated dynatrace instance
+
 # 1.28.0 (2025-08-06)
 * Updating dependencies
 * Updated distroless version

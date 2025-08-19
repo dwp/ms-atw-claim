@@ -10,13 +10,13 @@
 	</parent>
 	<groupId>uk.gov.dwp.health.atw</groupId>
 	<artifactId>ms-claim</artifactId>
-	<version>1.28.0</version>
+	<version>1.29.0</version>
 	<name>ms-claim</name>
 	<description>Claim service for AtW</description>
 	<properties>
 		<java.version>17</java.version>
 		<plugin.spotbugs.maven.version>4.9.1.0</plugin.spotbugs.maven.version>
-		<plugin.spotbugs.version>4.9.1</plugin.spotbugs.version>
+		<plugin.spotbugs.version>4.9.4</plugin.spotbugs.version>
 		<checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
 		<checkstyle.version>10.26.1</checkstyle.version>
 		<plugin.jacoco.version>0.8.13</plugin.jacoco.version>
@@ -34,6 +34,10 @@
 		<sonar.coverage.exclusions>uk/gov/dwp/health/atw/msclaim/config/KmsConfig.java, uk/gov/dwp/health/atw/msclaim/config/properties/EventCryptoConfigProperties.java</sonar.coverage.exclusions>
 		<jackson-databind.version>2.19.2</jackson-databind.version>
 		<annotations.version>3.0.1u2</annotations.version>
+		<!--fixes CVE errors for repo-->
+		<bc-fips.version>2.1.1</bc-fips.version><!-- To fix CVE-2025-8885 -->
+		<netty-all.version>4.2.4.Final</netty-all.version> <!-- To fix CVE-2025-55163 -->
+		<netty-codec-http2.version>4.2.4.Final</netty-codec-http2.version><!-- To fix CVE-2025-55163 -->
     </properties>
 	<dependencies>
 		<dependency>
@@ -116,6 +120,17 @@
 			<groupId>uk.gov.dwp.health.integration</groupId>
 			<artifactId>message-broker-integration-autoconfigure</artifactId>
 			<version>${dwp.message-broker.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bc-fips</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bc-fips</artifactId>
+			<version>${bc-fips.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -148,6 +163,22 @@
 				<version>${aws.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>${netty-all.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>io.netty</groupId>
+						<artifactId>netty-codec-http2</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-http2</artifactId>
+				<version>${netty-codec-http2.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
